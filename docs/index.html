@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Every cross reference in the Bible, Genesis to Revelation, as an interactive thread map and verse brain, with 30 threads tracing Jesus Christ through all Scripture.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bible Brain">
+<meta property="og:description" content="Every cross reference in the Bible, Genesis to Revelation, as an interactive thread map and verse brain, with 30 threads tracing Jesus Christ through all Scripture.">
+<meta property="og:url" content="https://isaiahhuus.github.io/bible-brain/">
+<meta property="og:image" content="https://isaiahhuus.github.io/bible-brain/preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#08090C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2046%2046%22%3E%3Crect%20width%3D%2246%22%20height%3D%2246%22%20rx%3D%2210%22%20fill%3D%22%2308090C%22/%3E%3Cpath%20d%3D%22M5%2018h36%22%20stroke%3D%22%23ECE6D8%22%20stroke-opacity%3D%22.6%22%20stroke-width%3D%221.6%22/%3E%3Cpath%20d%3D%22M7%2018a16%2016%200%200%200%2032%200%22%20fill%3D%22none%22%20stroke%3D%22%23E2B04A%22%20stroke-width%3D%222.4%22/%3E%3Cpath%20d%3D%22M12%2018a7.5%207.5%200%200%200%2015%200M21%2018a8%208%200%200%200%2016%200%22%20fill%3D%22none%22%20stroke%3D%22%23ECE6D8%22%20stroke-opacity%3D%22.6%22%20stroke-width%3D%221.4%22/%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Bible Brain</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a night-sky stage (the whole Bible drawn on canvas) beside a reading desk; one dark world, lit in gold. */
+:root{
+  --night:#08090C; --stage:#040507; --panel:#0D0F13; --panel-2:#14171C;
+  --vellum:#ECE6D8; --vellum-2:#C8C1B2; --ash:#8D887D; --hair:rgba(236,230,216,.12); --hair-2:rgba(236,230,216,.22);
+  --gold:#E2B04A; --gold-2:#F4D894; --gold-soft:rgba(226,176,74,.15);
+  --f-display:"Cormorant Garamond","Cormorant",Garamond,"Times New Roman",serif;
+  --f-text:"EB Garamond",Garamond,Georgia,"Times New Roman",serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--night);color:var(--vellum)}
+body{font-family:var(--f-text);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--night)}
+*{box-sizing:border-box}
+button,input{font:inherit;color:inherit}
+a{color:var(--gold-2)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1600px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header */
+.top{border-bottom:1px solid var(--hair)}
+.top-in{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px 30px;align-items:center;padding-block:18px 0}
+.brand{display:flex;gap:14px;align-items:center}
+.mark{width:46px;height:46px;flex:none}
+.eyebrow{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash)}
+h1{margin:2px 0 0;font-family:var(--f-display);font-weight:600;font-size:42px;line-height:.95;letter-spacing:.005em}
+.lede{margin:0;font-style:italic;color:var(--vellum-2);font-size:16.5px;line-height:1.45;max-width:64ch;text-wrap:pretty}
+.lede cite{font-style:normal;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-left:8px;white-space:nowrap}
+.verse-switch{display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.tabs{grid-column:1/-1;display:flex;gap:2px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
+.tabs a{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ash);padding:11px 14px 12px;text-decoration:none;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs a:hover{color:var(--vellum)}
+.tabs a[aria-selected="true"]{color:var(--gold-2);border-bottom-color:var(--gold)}
+@media (max-width:900px){.top-in{grid-template-columns:minmax(0,1fr) auto}.lede{grid-column:1/-1;grid-row:2}h1{font-size:34px}}
+@media (max-width:560px){h1{font-size:30px}.eyebrow{font-size:9.5px;letter-spacing:.12em}.mark{width:34px;height:34px}.verse-switch .lbl{display:none}.lede{font-size:15px}.dh{font-size:28px}.stats b{font-size:26px}}
+
+/* toolbar */
+.bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding-block:14px}
+.search{position:relative;flex:1 1 300px;max-width:520px;min-width:0}
+.search svg{position:absolute;left:12px;top:50%;width:16px;height:16px;transform:translateY(-50%);color:var(--ash)}
+.search input{width:100%;background:var(--panel);border:1px solid var(--hair-2);border-radius:999px;padding:9px 14px 9px 36px;font-family:var(--f-mono);font-size:13px;color:var(--vellum)}
+.search input::placeholder{color:#6F6B62}
+.search input:focus{border-color:var(--gold);outline:none}
+.sugg{position:absolute;z-index:30;left:0;right:0;top:calc(100% + 6px);background:#0F1216;border:1px solid var(--hair-2);border-radius:10px;max-height:min(460px,70vh);overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.6);padding:6px}
+.sugg .sh{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);padding:6px 8px 4px}
+.sugg button{display:block;width:100%;text-align:left;background:none;border:0;border-radius:6px;padding:7px 8px;cursor:pointer;line-height:1.35}
+.sugg button:hover,.sugg button.on{background:var(--gold-soft)}
+.sugg b{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--gold-2);margin-right:8px}
+.sugg span{font-size:15px;color:var(--vellum-2)}
+.sugg mark{background:none;color:var(--vellum);text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:3px}
+.fld{display:flex;align-items:center;gap:8px}
+.lbl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.seg{display:inline-flex;border:1px solid var(--hair-2);border-radius:999px;padding:2px;background:var(--panel)}
+.seg button{font-family:var(--f-mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;background:none;border:0;color:var(--ash);padding:5px 11px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.seg button:hover{color:var(--vellum)}
+.seg button[aria-pressed="true"]{background:var(--gold-soft);color:var(--gold-2)}
+.spacer{flex:1 1 auto}
+.vctl{display:contents}
+
+/* app grid */
+.app{display:grid;grid-template-columns:minmax(0,1fr) 392px;gap:14px;align-items:start;padding-bottom:18px}
+@media (max-width:1100px){.app{grid-template-columns:minmax(0,1fr)}}
+.stage{position:relative;background:var(--stage);border:1px solid #16191E;border-radius:12px;overflow:hidden;height:560px;touch-action:pan-y}
+.stage::before,.stage::after{content:"";position:absolute;z-index:3;width:12px;height:12px;border-color:var(--gold);border-style:solid;opacity:.8;pointer-events:none}
+.stage::before{top:-1px;left:-1px;border-width:2px 0 0 2px;border-top-left-radius:12px}
+.stage::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;border-bottom-right-radius:12px}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage canvas.top{cursor:crosshair}
+#bstage{height:clamp(480px,76vh,860px);touch-action:none}
+#bcv{cursor:grab}
+#bcv.grab{cursor:grabbing}
+#bcv.pt{cursor:pointer}
+.msg{position:absolute;inset:0;z-index:2;display:grid;place-items:center;text-align:center;padding:24px;pointer-events:none}
+.msg div{max-width:420px;color:var(--ash);font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;line-height:1.7}
+.msg b{display:block;font-family:var(--f-display);font-weight:600;font-size:28px;letter-spacing:.04em;color:var(--vellum);margin-bottom:6px}
+.tip{position:absolute;z-index:5;pointer-events:none;background:rgba(9,10,13,.95);border:1px solid var(--hair-2);border-radius:6px;padding:8px 11px;max-width:320px;font-family:var(--f-mono);font-size:11.5px;line-height:1.5;color:var(--vellum-2);box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.tip b{color:#fff;font-weight:600}
+.tip .tx{display:block;margin-top:4px;font-family:var(--f-text);font-size:15px;line-height:1.4;color:var(--vellum)}
+.tip .g{color:var(--gold-2)}
+.prog{position:absolute;z-index:3;left:50%;top:58%;width:min(260px,60%);height:2px;transform:translateX(-50%);background:rgba(236,230,216,.12);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--gold);transition:width .2s linear}
+.hint{position:absolute;z-index:2;left:14px;bottom:12px;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#5F5B53;pointer-events:none}
+.zoom{position:absolute;z-index:4;right:12px;bottom:12px;display:flex;gap:6px}
+.zoom button{min-width:34px;height:32px;padding:0 10px;border:1px solid var(--hair-2);background:rgba(13,15,19,.85);color:var(--vellum);border-radius:6px;font-family:var(--f-mono);font-size:12px;cursor:pointer}
+.zoom button:hover{border-color:var(--gold)}
+
+/* desk */
+.desk{background:var(--panel);border:1px solid var(--hair);border-radius:12px;padding:18px 18px 22px;overflow-y:auto;overflow-x:hidden;min-width:0;max-height:var(--desk-h,none);scrollbar-width:thin;scrollbar-color:#2A2D33 transparent}
+@media (max-width:1100px){.desk{max-height:none}}
+.k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ash);display:flex;gap:10px;align-items:center;justify-content:space-between}
+.k .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+.dh{margin:6px 0 2px;font-family:var(--f-display);font-weight:600;font-size:32px;line-height:1.02;letter-spacing:.005em;text-wrap:balance}
+.sub{font-family:var(--f-mono);font-size:11.5px;color:var(--ash);font-variant-numeric:tabular-nums}
+.vt{margin:12px 0 0;font-size:20px;line-height:1.5;color:var(--vellum);text-wrap:pretty}
+.vt i,.tx i,.rt i,.st-t i{color:var(--vellum-2)}
+.note{margin:10px 0 0;font-size:14.5px;font-style:italic;color:var(--ash)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--hair-2);background:none;color:var(--vellum);border-radius:999px;padding:6px 13px;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--gold);color:var(--gold-2)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#16120A;font-weight:600}
+.btn.gold:hover{background:var(--gold-2);color:#16120A}
+.sec{margin-top:22px}
+.sec>.k{padding-bottom:7px;border-bottom:1px solid var(--hair)}
+.p{margin:10px 0 0;font-size:16px;line-height:1.55;color:var(--vellum-2);text-wrap:pretty}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-top:14px}
+.stats div{display:flex;flex-direction:column;min-width:0}
+.stats b{font-family:var(--f-display);font-weight:600;font-size:30px;line-height:1;color:#fff;font-variant-numeric:lining-nums tabular-nums}
+.stats span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ash);margin-top:3px}
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;width:100%;text-align:left;padding:9px 4px;border:0;border-bottom:1px solid var(--hair);background:none;cursor:pointer;align-items:baseline}
+.row:hover,.row.on{background:rgba(226,176,74,.07)}
+.row .rr{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--vellum);display:flex;align-items:center;gap:7px;min-width:0}
+.row .rr .dot{width:7px;height:7px;border-radius:50%;flex:none}
+.row .rn{font-family:var(--f-mono);font-size:11px;color:var(--ash);font-variant-numeric:tabular-nums;white-space:nowrap}
+.row .rt{grid-column:1/-1;font-size:15px;line-height:1.4;color:var(--vellum-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row.vrow{grid-template-columns:30px minmax(0,1fr) auto}
+.row.vrow .vn{font-family:var(--f-mono);font-size:11px;color:var(--gold);padding-top:3px}
+.row.vrow .rt{grid-column:2;-webkit-line-clamp:3}
+.row.vrow .rn{grid-column:3;grid-row:1}
+.bars{display:flex;flex-direction:column;gap:5px;margin-top:10px}
+.brow{display:grid;grid-template-columns:96px minmax(0,1fr) 48px;gap:10px;align-items:center;font-family:var(--f-mono);font-size:11.5px;color:var(--vellum-2);background:none;border:0;padding:2px 0;text-align:left;cursor:pointer}
+.brow:hover{color:#fff}
+.brow i{display:block;height:7px;border-radius:4px;min-width:2px}
+.brow em{font-style:normal;color:var(--ash);text-align:right;font-variant-numeric:tabular-nums}
+.crumbs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
+.crumb{border:0;background:none;padding:0;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ash);cursor:pointer}
+.crumb:hover{color:var(--gold-2)}
+.crumbs .sep{color:#4A4740;font-size:11px}
+.more{margin-top:10px}
+.ld{color:var(--ash);font-style:italic}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;margin-top:10px}
+.legend span{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:11px;color:var(--vellum-2);min-width:0}
+.legend span i{width:9px;height:9px;border-radius:50%;flex:none}
+.legend em{font-style:normal;color:var(--ash);margin-left:auto;font-variant-numeric:tabular-nums}
+.path{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.path button{border:1px solid var(--hair-2);background:none;border-radius:999px;padding:3px 10px;font-family:var(--f-mono);font-size:11px;color:var(--vellum-2);cursor:pointer}
+.path button:hover{border-color:var(--gold);color:var(--gold-2)}
+.path button.on{border-color:var(--gold);color:var(--gold-2);background:var(--gold-soft)}
+
+/* Christ threads */
+.tgroup{margin-top:18px}
+.tgroup>.k{padding-bottom:6px;border-bottom:1px solid var(--hair)}
+.tcard{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--hair);padding:10px 4px;cursor:pointer}
+.tcard:hover{background:rgba(226,176,74,.07)}
+.tcard b{display:block;font-family:var(--f-display);font-weight:600;font-size:21px;line-height:1.1;color:var(--vellum)}
+.tcard span{display:block;margin-top:3px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;color:var(--ash)}
+.steps{list-style:none;margin:14px 0 0;padding:0;counter-reset:st}
+.step{position:relative;padding:0 0 0 34px}
+.step::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:10px;width:22px;height:22px;border-radius:50%;border:1px solid var(--gold);color:var(--gold-2);font-family:var(--f-mono);font-size:10.5px;display:grid;place-items:center}
+.step::after{content:"";position:absolute;left:11px;top:34px;bottom:-6px;width:1px;background:linear-gradient(var(--gold),rgba(226,176,74,.1))}
+.step:last-child::after{display:none}
+.step button{display:block;width:100%;text-align:left;background:none;border:0;border-radius:6px;padding:9px 6px 12px;cursor:pointer}
+.step button:hover,.step.on button{background:rgba(226,176,74,.08)}
+.step .sr{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--gold-2)}
+.step .st-t{display:block;margin-top:3px;font-size:16px;line-height:1.45;color:var(--vellum)}
+.step .lk{display:block;margin-top:5px;font-family:var(--f-mono);font-size:10.5px;color:var(--ash)}
+.blurb{margin:8px 0 0;font-size:17px;font-style:italic;line-height:1.5;color:var(--vellum-2)}
+.quote{margin:12px 0 0;padding-left:14px;border-left:2px solid var(--gold);font-size:18px;font-style:italic;line-height:1.5;color:var(--vellum)}
+.quote cite{display:block;margin-top:4px;font-style:normal;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+
+.foot{padding-block:8px 34px;color:var(--ash);font-size:14.5px;line-height:1.55;max-width:110ch}
+.foot a{color:var(--vellum-2)}
+.err{color:#F08A7E}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 46 46" fill="none" aria-hidden="true">
+        <path d="M5 16h36" stroke="#ECE6D8" stroke-opacity=".55" stroke-width="1.2"/>
+        <path d="M7 16a16 16 0 0 0 32 0" stroke="#E2B04A" stroke-width="1.6"/>
+        <path d="M12 16a7.5 7.5 0 0 0 15 0M21 16a8 8 0 0 0 16 0M9 16a4 4 0 0 0 8 0" stroke="#ECE6D8" stroke-opacity=".5" stroke-width="1"/>
+        <path d="M8 16v-4M13 16v-6M18 16v-3M23 16v-7M28 16v-4M33 16v-5M38 16v-3" stroke="#ECE6D8" stroke-opacity=".45" stroke-width="1"/>
+      </svg>
+      <div><div class="eyebrow">Genesis to Revelation</div><h1>Bible Brain</h1></div>
+    </div>
+    <p class="lede">“And beginning at Moses and all the prophets, he expounded unto them in all the scriptures the things concerning himself.”<cite>Luke 24:27</cite></p>
+    <div class="verse-switch">
+      <span class="lbl">Bible version</span>
+      <div class="seg" id="ver" role="group" aria-label="Bible version">
+        <button type="button" data-v="kjv" aria-pressed="true" title="King James Version (1769)">KJV</button>
+        <button type="button" data-v="bsb" aria-pressed="false" title="Berean Standard Bible, a modern translation">BSB</button>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <a href="#threads" data-v="threads" role="tab" aria-selected="true">Every thread</a>
+      <a href="#brain" data-v="brain" role="tab" aria-selected="false">Verse brain</a>
+      <a href="#christ" data-v="christ" role="tab" aria-selected="false">Christ in all Scripture</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="bar">
+    <div class="search">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6"/><path d="m13 13 5 5"/></svg>
+      <input id="q" type="search" placeholder="Find a verse or word: John 3:16, Isaiah 53, lamb…" autocomplete="off" spellcheck="false" aria-label="Find a verse, chapter or word">
+      <div class="sugg" id="sugg" hidden></div>
+    </div>
+    <span class="spacer"></span>
+    <div class="vctl" id="ctl-threads">
+      <div class="fld"><span class="lbl">Layout</span>
+        <div class="seg" id="t-mode" role="group" aria-label="Layout">
+          <button type="button" data-v="arc" aria-pressed="true">Arc</button>
+          <button type="button" data-v="ring" aria-pressed="false">Ring</button>
+        </div>
+      </div>
+      <div class="fld"><span class="lbl">Reader votes</span>
+        <div class="seg" id="t-mv" role="group" aria-label="Minimum reader votes">
+          <button type="button" data-v="0" aria-pressed="true">All</button>
+          <button type="button" data-v="5" aria-pressed="false">5+</button>
+          <button type="button" data-v="20" aria-pressed="false">20+</button>
+          <button type="button" data-v="50" aria-pressed="false">50+</button>
+        </div>
+      </div>
+      <div class="fld"><span class="lbl">Color</span>
+        <div class="seg" id="t-col" role="group" aria-label="Thread color">
+          <button type="button" data-v="silver" aria-pressed="true">Silver</button>
+          <button type="button" data-v="section" aria-pressed="false">By section</button>
+        </div>
+      </div>
+    </div>
+    <div class="vctl" id="ctl-brain" hidden>
+      <div class="fld"><span class="lbl">Connections</span>
+        <div class="seg" id="b-k" role="group" aria-label="How many connected verses">
+          <button type="button" data-v="12" aria-pressed="false">12</button>
+          <button type="button" data-v="24" aria-pressed="true">24</button>
+          <button type="button" data-v="48" aria-pressed="false">48</button>
+        </div>
+      </div>
+      <div class="fld"><span class="lbl">Depth</span>
+        <div class="seg" id="b-d" role="group" aria-label="Depth">
+          <button type="button" data-v="1" aria-pressed="false">1 step</button>
+          <button type="button" data-v="2" aria-pressed="true">2 steps</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="app" id="v-arc" aria-label="Every cross reference in the Bible">
+    <div class="stage" id="astage">
+      <canvas id="acv" role="img" aria-label="Every chapter of the Bible from Genesis to Revelation along a line, with an arc for each cross reference between chapters"></canvas>
+      <canvas id="aov" class="top" aria-hidden="true"></canvas>
+      <div class="msg" id="amsg"><div><b>Gathering the threads</b>Laying out 31,102 verses and their cross references…</div></div>
+      <div class="prog" id="aprog" hidden><i></i></div>
+      <div class="hint" id="ahint">Hover a chapter · click to open it</div>
+      <div class="tip" id="atip" hidden></div>
+    </div>
+    <aside class="desk" id="adesk" aria-live="polite"></aside>
+  </section>
+
+  <section class="app" id="v-brain" aria-label="Verse brain" hidden>
+    <div class="stage" id="bstage">
+      <canvas id="bcv" role="img" aria-label="The selected verse in the center with the verses that cross-reference it around it"></canvas>
+      <div class="msg" id="bmsg" hidden></div>
+      <div class="hint">Drag to move · scroll or pinch to zoom · click a verse to follow it</div>
+      <div class="zoom"><button type="button" id="zin" aria-label="Zoom in">+</button><button type="button" id="zout" aria-label="Zoom out">−</button><button type="button" id="zfit">Reset</button></div>
+      <div class="tip" id="btip" hidden></div>
+    </div>
+    <aside class="desk" id="bdesk" aria-live="polite"></aside>
+  </section>
+
+  <p class="foot" id="foot">Cross references from <a href="https://www.openbible.info/labs/cross-references/" target="_blank" rel="noopener">OpenBible.info</a> (CC BY), built on the Treasury of Scripture Knowledge and ranked by reader votes; references readers voted down are left out. Verse text: King James Version (1769) and the Berean Standard Bible, both public domain. The NIV is copyrighted, so NIV links open the verse on BibleGateway.</p>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtN=n=>n.toLocaleString('en-US');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const SEC_COL=['#D98E5F','#B4B97A','#6FBF9A','#5FAFC9','#7F96DB','#F1EADB','#C896DB','#A182E3','#E384A8','#E46A5E'];
+const GOLD='#E2B04A';
+const rgba=(h,a)=>{const n=parseInt(h.slice(1),16);return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`;};
+const mixW=(h,t)=>{const n=parseInt(h.slice(1),16);const c=[n>>16,(n>>8)&255,n&255].map(v=>Math.round(v+(255-v)*t));return `rgb(${c[0]},${c[1]},${c[2]})`;};
+const MONO='"IBM Plex Mono", ui-monospace, Consolas, monospace';
+const SERIF='"Cormorant Garamond", Garamond, "Times New Roman", serif';
+
+const S={view:'threads',ver:'kjv',text:{kjv:null,bsb:null},loading:{}};
+let D=null;
+
+/* ---------------- data ---------------- */
+function b64(s,T){const bin=atob(s),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return T===Uint8Array?u:new T(u.buffer);}
+function buildData(j){
+  const books=j.books;let N=0,NCH=0;for(const b of books){N+=b.v.reduce((a,c)=>a+c,0);NCH+=b.v.length;}
+  const vBook=new Uint8Array(N),vCh=new Uint16Array(N),vNum=new Uint16Array(N);
+  const chStart=new Uint32Array(NCH+1),chLen=new Uint16Array(NCH),chBook=new Uint8Array(NCH),chNum=new Uint16Array(NCH);
+  const bookStart=new Uint32Array(67),bookCh0=new Uint16Array(67);
+  let v=0,c=0;
+  books.forEach((b,bi)=>{bookStart[bi]=v;bookCh0[bi]=c;b.v.forEach((n,ci)=>{chStart[c]=v;chLen[c]=n;chBook[c]=bi;chNum[c]=ci+1;for(let k=1;k<=n;k++){vBook[v]=bi;vCh[v]=c;vNum[v]=k;v++;}c++;});});
+  bookStart[66]=N;bookCh0[66]=NCH;chStart[NCH]=N;
+  const counts=b64(j.counts,Uint16Array),to=b64(j.to,Uint16Array),span=b64(j.span,Uint8Array),votes=b64(j.votes,Uint16Array);
+  const n=j.n,start=new Uint32Array(N+1),from=new Uint16Array(n);
+  for(let i=0;i<N;i++)start[i+1]=start[i]+counts[i];
+  for(let i=0;i<N;i++)for(let k=start[i];k<start[i+1];k++)from[k]=i;
+  const inC=new Uint32Array(N+1);for(let k=0;k<n;k++)inC[to[k]+1]++;
+  for(let i=0;i<N;i++)inC[i+1]+=inC[i];
+  const inStart=inC.slice(),fill=inC.slice(0,N),inRef=new Uint32Array(n);
+  for(let k=0;k<n;k++)inRef[fill[to[k]]++]=k;
+  // aliases for search
+  const alias=new Map();
+  const add=(k,bi)=>{k=k.toLowerCase().replace(/[\s.]/g,'');if(!alias.has(k))alias.set(k,bi);};
+  books.forEach((b,bi)=>{add(b.n,bi);add(b.a,bi);add(b.o,bi);});
+  const EXTRA={gen:0,ge:0,gn:0,exo:1,ex:1,exod:1,lev:2,lv:2,le:2,num:3,nu:3,nm:3,deu:4,dt:4,jos:5,jsh:5,jdg:6,jg:6,jdgs:6,rth:7,ru:7,'1sa':8,'1s':8,'2sa':9,'2s':9,'1ki':10,'1k':10,'2ki':11,'2k':11,'1ch':12,'2ch':13,ezr:14,ne:15,est:16,es:16,jb:17,psa:18,psalm:18,pss:18,psm:18,pr:19,prv:19,pro:19,ecc:20,ec:20,qoh:20,so:21,sos:21,songofsongs:21,canticles:21,cant:21,is:22,jr:23,je:23,la:24,eze:25,ezk:25,da:26,dn:26,ho:27,jl:28,joe:28,am:29,ob:30,oba:30,jnh:31,jon:31,mi:32,mc:32,na:33,nam:33,hb:34,zep:35,zp:35,hg:36,zec:37,zc:37,ml:38,mt:39,mat:39,mk:40,mr:40,mrk:40,lk:41,luk:41,jn:42,jhn:42,joh:42,ac:43,act:43,ro:44,rm:44,'1co':45,'2co':46,ga:47,gl:47,ep:48,php:49,pp:49,phi:49,co:50,'1th':51,'1ts':51,'2th':52,'2ts':52,'1ti':53,'1tm':53,'2ti':54,'2tm':54,tit:55,ti:55,phm:56,philem:56,pm:56,he:57,hbr:57,jam:58,jm:58,ja:58,'1pe':59,'1pt':59,'1p':59,'2pe':60,'2pt':60,'2p':60,'1jn':61,'1jo':61,'1jhn':61,'2jn':62,'2jo':62,'3jn':63,'3jo':63,jud:64,jd:64,re:65,rv:65,revelations:65,apocalypse:65};
+  for(const k in EXTRA)add(k,EXTRA[k]);
+  return {books,sections:j.sections,threads:j.threads,N,NCH,n,vBook,vCh,vNum,chStart,chLen,chBook,chNum,bookStart,bookCh0,start,to,span,votes,from,inStart,inRef,alias};
+}
+const secOf=v=>D.books[D.vBook[v]].s;
+const colOf=v=>SEC_COL[secOf(v)];
+function bname(bi,long){const b=D.books[bi];return long?(b.o==='Ps'?'Psalm':b.n):b.a;}
+function ref(v,long){return `${bname(D.vBook[v],long)} ${D.chNum[D.vCh[v]]}:${D.vNum[v]}`;}
+function refR(v,sp,long){if(!sp)return ref(v,long);const e=Math.min(D.N-1,v+sp);if(D.vCh[e]===D.vCh[v])return `${ref(v,long)}–${D.vNum[e]}`;return `${ref(v,long)}–${D.chNum[D.vCh[e]]}:${D.vNum[e]}`;}
+function chName(c,long=true){return `${bname(D.chBook[c],long)} ${D.chNum[c]}`;}
+const slugB=bi=>D.books[bi].n.toLowerCase().replace(/\s+/g,'-');
+const slugV=v=>`${slugB(D.vBook[v])}-${D.chNum[D.vCh[v]]}-${D.vNum[v]}`;
+const vid=(bi,c,vn)=>{const ch=D.bookCh0[bi]+c-1;if(c<1||ch>=D.bookCh0[bi+1])return -1;if(vn<1||vn>D.chLen[ch])return -1;return D.chStart[ch]+vn-1;};
+const niv=v=>`https://www.biblegateway.com/passage/?search=${encodeURIComponent(ref(v,true).replace('Psalm ','Psalm '))}&version=NIV`;
+
+function neighbors(v,mv=0){
+  const m=new Map();
+  for(let k=D.start[v];k<D.start[v+1];k++){if(D.votes[k]<mv)continue;const t=D.to[k];if(t===v)continue;m.set(t,{v:t,votes:D.votes[k],span:D.span[k],dir:1});}
+  for(let q=D.inStart[v];q<D.inStart[v+1];q++){const k=D.inRef[q];if(D.votes[k]<mv)continue;const f=D.from[k];if(f===v)continue;const e=m.get(f);if(e){e.dir=3;if(D.votes[k]>e.votes)e.votes=D.votes[k];}else m.set(f,{v:f,votes:D.votes[k],span:0,dir:2});}
+  return [...m.values()].sort((a,b)=>b.votes-a.votes||a.v-b.v);
+}
+function linkVotes(a,b){let best=-1;for(let k=D.start[a];k<D.start[a+1];k++)if(D.to[k]===b||(D.to[k]<=b&&b<=D.to[k]+D.span[k]))best=Math.max(best,D.votes[k]);for(let k=D.start[b];k<D.start[b+1];k++)if(D.to[k]===a||(D.to[k]<=a&&a<=D.to[k]+D.span[k]))best=Math.max(best,D.votes[k]);return best;}
+
+/* ---------------- verse text ---------------- */
+function txt(v){const T=S.text[S.ver]||S.text.kjv;if(!T)return null;return T[v]||'';}
+function fmt(t){return esc(t).replace(/\[([^\]]+)\]/g,'<i>$1</i>');}
+function verseHTML(v,cls='vt'){
+  const t=txt(v);if(t===null)return `<p class="${cls}"><span class="ld">Loading verse text…</span></p>`;
+  if(!t&&S.ver==='bsb'){const k=S.text.kjv&&S.text.kjv[v];return `<p class="note">The BSB leaves this verse out of its main text because the oldest manuscripts do not have it. KJV:</p><p class="${cls}">${fmt(k||'')}</p>`;}
+  return `<p class="${cls}">${fmt(t)}</p>`;
+}
+const snip=v=>{const t=txt(v);if(t===null)return '<span class="ld">Loading…</span>';if(!t)return '<span class="ld">Not in the BSB main text</span>';return fmt(t);};
+const plain=v=>{const t=txt(v);return t?t.replace(/[\[\]]/g,''):'';};
+async function loadText(ver){
+  if(S.text[ver]||S.loading[ver])return S.loading[ver];
+  S.loading[ver]=fetch(`data/${ver}.json`).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(a=>{S.text[ver]=a;renderDesks();return a;}).catch(e=>{S.loading[ver]=null;console.error(e);});
+  return S.loading[ver];
+}
+
+/* ================= EVERY THREAD (arc / ring) ================= */
+const A={mode:'arc',mv:0,color:'silver',w:0,h:0,dpr:1,L:18,W:0,axis:70,sy:1,cx:0,cy:0,R:0,
+  pairs:null,chRefs:null,job:0,ready:false,hovCh:-1,selCh:-1,selV:-1,preview:-1,previewPair:null,thread:null,threadT0:0,stepHover:-1,raf:0,longest:[],top:[],aBase:0.006,aLog:0.01};
+const GAP=0.05;
+const ang=p=>-Math.PI/2+GAP/2+p/D.N*(Math.PI*2-GAP);
+const xAt=p=>A.L+p/D.N*A.W;
+function posV(v){const p=v+0.5;if(A.mode==='arc')return [xAt(p),A.axis];const a=ang(p);return [A.cx+Math.cos(a)*A.R,A.cy+Math.sin(a)*A.R];}
+function posC(c){const p=D.chStart[c]+D.chLen[c]/2;if(A.mode==='arc')return [xAt(p),A.axis];const a=ang(p);return [A.cx+Math.cos(a)*A.R,A.cy+Math.sin(a)*A.R];}
+function curve(ctx,x1,y1,x2,y2,frac=1){
+  if(A.mode==='arc'){if(x2<x1){const t=x1;x1=x2;x2=t;}const rx=(x2-x1)/2;if(rx<0.15)return false;ctx.moveTo(x1,A.axis);ctx.ellipse(x1+rx,A.axis,rx,rx*A.sy,0,Math.PI,Math.PI-Math.PI*frac,true);return true;}
+  const mx=(x1+x2)/2,my=(y1+y2)/2,d=Math.hypot(x2-x1,y2-y1);if(d<0.3)return false;const f=0.25+0.5*Math.min(1,d/(2*A.R));const qx=mx+(A.cx-mx)*f,qy=my+(A.cy-my)*f;
+  ctx.moveTo(x1,y1);
+  if(frac>=1){ctx.quadraticCurveTo(qx,qy,x2,y2);return true;}
+  const N=24;for(let i=1;i<=N*frac;i++){const t=i/N,u=1-t;ctx.lineTo(u*u*x1+2*u*t*qx+t*t*x2,u*u*y1+2*u*t*qy+t*t*y2);}return true;
+}
+function aggregate(){
+  const mv=A.mv,NCH=D.NCH,m=new Map(),chRefs=new Uint32Array(NCH);
+  for(let k=0;k<D.n;k++){if(D.votes[k]<mv)continue;const a=D.vCh[D.from[k]],b=D.vCh[D.to[k]];chRefs[a]++;if(a===b)continue;chRefs[b]++;const key=a<b?a*NCH+b:b*NCH+a;m.set(key,(m.get(key)||0)+1);}
+  const keys=Float64Array.from(m.keys()).sort();const P=new Uint32Array(keys.length*3);
+  keys.forEach((key,i)=>{P[i*3]=Math.floor(key/NCH);P[i*3+1]=key%NCH;P[i*3+2]=m.get(key);});
+  A.pairs=P;A.chRefs=chRefs;A.nShown=0;for(let k=0;k<D.n;k++)if(D.votes[k]>=mv)A.nShown++;
+}
+function sizeArc(){
+  const st=$('#astage'),w=st.clientWidth;if(!w)return false;
+  let h;if(A.mode==='arc'){A.axis=w<560?62:74;h=Math.round(w/2+A.axis+22);h=clamp(h,300,Math.max(380,innerHeight*0.84));}
+  else h=Math.round(clamp(Math.min(w,innerHeight*0.86),340,1100));
+  st.style.height=h+'px';document.documentElement.style.setProperty('--desk-h',h+'px');
+  const dpr=Math.min(2,devicePixelRatio||1);
+  if(w===A.w&&h===A.h&&dpr===A.dpr)return false;
+  A.w=w;A.h=h;A.dpr=dpr;
+  for(const id of ['#acv','#aov']){const c=$(id);c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);}
+  A.L=w<560?10:18;A.W=w-A.L*2;A.sy=Math.min(1,(h-A.axis-16)/(A.W/2));
+  A.cx=w/2;A.cy=h/2;A.R=Math.min(w,h)/2-(w<560?40:58);
+  return true;
+}
+/* Density render: count how many threads cross each pixel (in a worker), then tone-map. */
+function accumulate(m,onProg){
+  const W=m.W,H=m.H,n=W*H,multi=m.color==='section',pairs=m.pairs,pos=m.pos,sec=m.sec,cols=m.cols,ST=m.step||1.2;
+  const dens=new Float32Array(n);let rC=null,gC=null,bC=null;if(multi){rC=new Float32Array(n);gC=new Float32Array(n);bC=new Float32Array(n);}
+  const P=pairs.length/3,TAU=Math.PI*2,Wm=W-1,Hm=H-1;
+  const xs=new Float32Array(8192),ys=new Float32Array(8192);
+  for(let i=0;i<P;i++){
+    if(onProg&&i%12000===0)onProg(i/P);
+    const A0=pairs[i*3],B0=pairs[i*3+1],cnt=pairs[i*3+2],w=1+Math.log2(cnt);let ns=0;
+    if(m.mode==='arc'){
+      const x1=m.L+pos[A0]/m.N*m.AW,x2=m.L+pos[B0]/m.N*m.AW,rx=(x2-x1)/2;if(rx<0.3)continue;const ry=rx*m.sy,cx=x1+rx,cy=m.axis;
+      const steps=Math.min(8000,Math.ceil(Math.PI*Math.max(rx,ry)/ST)),dt=Math.PI/steps,c=Math.cos(dt),s=Math.sin(dt),j0=Math.random()*dt;let ux=Math.cos(j0),uy=Math.sin(j0);
+      for(let k=0;k<steps;k++){xs[ns]=cx+ux*rx;ys[ns++]=cy+uy*ry;const nx=ux*c-uy*s;uy=ux*s+uy*c;ux=nx;}
+    }else{
+      const a1=-Math.PI/2+m.gap/2+pos[A0]/m.N*(TAU-m.gap),a2=-Math.PI/2+m.gap/2+pos[B0]/m.N*(TAU-m.gap);
+      const x1=m.cx+Math.cos(a1)*m.R,y1=m.cy+Math.sin(a1)*m.R,x2=m.cx+Math.cos(a2)*m.R,y2=m.cy+Math.sin(a2)*m.R;
+      const mx=(x1+x2)/2,my=(y1+y2)/2,dd=Math.hypot(x2-x1,y2-y1);if(dd<0.4)continue;const f=0.25+0.5*Math.min(1,dd/(2*m.R));const qx=mx+(m.cx-mx)*f,qy=my+(m.cy-my)*f;
+      const len=Math.hypot(qx-x1,qy-y1)+Math.hypot(x2-qx,y2-qy),steps=Math.min(8000,Math.max(2,Math.ceil(len/ST)));
+      const jt=Math.random();for(let k=0;k<steps;k++){const t=(k+jt)/steps,u=1-t;xs[ns]=u*u*x1+2*u*t*qx+t*t*x2;ys[ns++]=u*u*y1+2*u*t*qy+t*t*y2;}
+    }
+    if(!multi&&m.nearest){
+      for(let k=0;k<ns;k++){const x0=(xs[k]+0.5)|0,y0=(ys[k]+0.5)|0;if(x0<0||y0<0||x0>Wm||y0>Hm)continue;dens[y0*W+x0]+=w;}
+    }else if(!multi){
+      for(let k=0;k<ns;k++){const x=xs[k],y=ys[k],x0=x|0,y0=y|0;if(x0<0||y0<0||x0>=Wm||y0>=Hm)continue;const fx=x-x0,fy=y-y0,j=y0*W+x0,gx=1-fx,gy=1-fy;
+        dens[j]+=gx*gy*w;dens[j+1]+=fx*gy*w;dens[j+W]+=gx*fy*w;dens[j+W+1]+=fx*fy*w;}
+    }else{const sI=sec[A0]*3,cr=cols[sI],cg=cols[sI+1],cb=cols[sI+2];
+      for(let k=0;k<ns;k++){const x=xs[k],y=ys[k],x0=x|0,y0=y|0;if(x0<0||y0<0||x0>=Wm||y0>=Hm)continue;const fx=x-x0,fy=y-y0,j=y0*W+x0,gx=1-fx,gy=1-fy;
+        const q0=gx*gy*w,q1=fx*gy*w,q2=gx*fy*w,q3=fx*fy*w;
+        dens[j]+=q0;dens[j+1]+=q1;dens[j+W]+=q2;dens[j+W+1]+=q3;
+        rC[j]+=q0*cr;rC[j+1]+=q1*cr;rC[j+W]+=q2*cr;rC[j+W+1]+=q3*cr;
+        gC[j]+=q0*cg;gC[j+1]+=q1*cg;gC[j+W]+=q2*cg;gC[j+W+1]+=q3*cg;
+        bC[j]+=q0*cb;bC[j+1]+=q1*cb;bC[j+W]+=q2*cb;bC[j+W+1]+=q3*cb;}}
+  }
+  // tone map on a log scale against the 99.6th percentile
+  let mx=0;for(let i=0;i<n;i++)if(dens[i]>mx)mx=dens[i];
+  const out=new Uint8ClampedArray(n*4);const bg=m.bg,fg=m.fg;
+  if(mx>0){const HB=2048,hist=new Uint32Array(HB),lm=Math.log1p(mx);let nz=0;
+    for(let i=0;i<n;i++){const d=dens[i];if(d>0.02){hist[Math.min(HB-1,(Math.log1p(d)/lm*(HB-1))|0)]++;nz++;}}
+    const at=q=>{let acc=0;const goal=nz*q;for(let b=0;b<HB;b++){acc+=hist[b];if(acc>=goal)return Math.expm1(b/(HB-1)*lm);}return mx;};
+    const top=Math.max(1e-3,at(m.hi)),med=Math.max(1e-3,at(0.5)),a=m.gain/med,den=Math.log1p(top*a);
+    for(let i=0;i<n;i++){const d=dens[i],j=i*4;let v=d>0?Math.min(1,Math.log1p(d*a)/den):0;v=Math.pow(v,m.gamma);
+      let r=fg[0],g=fg[1],b=fg[2];if(multi&&d>0){r=rC[i]/d;g=gC[i]/d;b=bC[i]/d;}
+      const hot=Math.max(0,v-0.82)/0.18;r=r+(255-r)*hot*0.6;g=g+(255-g)*hot*0.6;b=b+(255-b)*hot*0.6;
+      out[j]=bg[0]+(r-bg[0])*v;out[j+1]=bg[1]+(g-bg[1])*v;out[j+2]=bg[2]+(b-bg[2])*v;out[j+3]=255;}
+  }else for(let i=0;i<n;i++){const j=i*4;out[j]=bg[0];out[j+1]=bg[1];out[j+2]=bg[2];out[j+3]=255;}
+  return out;
+}
+let WURL=null,WK=null;
+function newWorker(){try{if(!WURL){const src=accumulate.toString()+'\nself.onmessage=e=>{const m=e.data;const out=accumulate(m,p=>self.postMessage({id:m.id,prog:p}));self.postMessage({id:m.id,buf:out.buffer},[out.buffer]);};';WURL=URL.createObjectURL(new Blob([src],{type:'text/javascript'}));}
+  if(WK)WK.terminate();WK=new Worker(WURL);return WK;}catch(e){return null;}}
+const CACHE=new Map();
+function toneFor(){const T=A.tone||{};const hi=A.mv>=20?0.996:0.998,gain=A.mv>=20?1.4:0.9,gamma=A.mv>=20?1.0:1.45;return {hi:T.hi||hi,gain:T.gain||gain,gamma:T.gamma||gamma,step:T.step||(A.mv>=20?0.9:1.2)};}
+function renderBase(anim){
+  if(!D||!A.w||!A.h)return;const job=++A.job;A.ready=false;A.t0=performance.now();
+  const rs=A.dpr>1.6?1.5:1,W=Math.round(A.w*rs),H=Math.round(A.h*rs);
+  const key=[A.mode,A.mv,A.color,W,H].join('|');
+  if(CACHE.has(key)){A.img=CACHE.get(key);A.renderMs=0;reveal(job,anim);return;}
+  const pos=new Float32Array(D.NCH),sec=new Uint8Array(D.NCH);for(let c=0;c<D.NCH;c++){pos[c]=D.chStart[c]+D.chLen[c]/2;sec[c]=D.books[D.chBook[c]].s;}
+  const cols=new Float32Array(30);SEC_COL.forEach((h,i)=>{const n=parseInt(h.slice(1),16);cols[i*3]=n>>16;cols[i*3+1]=(n>>8)&255;cols[i*3+2]=n&255;});
+  const m={id:job,mode:A.mode,color:A.color,W,H,N:D.N,L:A.L*rs,AW:A.W*rs,axis:A.axis*rs,sy:A.sy,cx:A.cx*rs,cy:A.cy*rs,R:A.R*rs,gap:GAP,
+    pairs:A.pairs.slice(),pos,sec,cols,bg:[4,5,7],fg:[206,212,224],nearest:A.mv<20,...toneFor()};
+  const bar=$('#aprog');
+  const done=buf=>{if(job!==A.job)return;A.renderMs=Math.round(performance.now()-A.t0);bar.hidden=true;const img=new ImageData(new Uint8ClampedArray(buf),W,H);const off=document.createElement('canvas');off.width=W;off.height=H;off.getContext('2d').putImageData(img,0,0);A.img=off;
+    if(CACHE.size>8)CACHE.delete(CACHE.keys().next().value);CACHE.set(key,off);reveal(job,anim);};
+  const wk=newWorker();
+  if(wk){wk.onmessage=e=>{if(e.data.id!==job)return;if(e.data.buf)done(e.data.buf);else{bar.hidden=false;bar.firstElementChild.style.width=(e.data.prog*100).toFixed(1)+'%';}};wk.postMessage(m,[m.pairs.buffer]);}
+  else setTimeout(()=>done(accumulate(m).buffer),0);
+}
+function paintBase(ctx,p){
+  ctx.setTransform(1,0,0,1,0,0);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;ctx.fillStyle='#040507';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
+  if(A.img){ctx.save();if(p<1){ctx.beginPath();if(A.mode==='arc'){ctx.rect(0,0,(A.L+A.W*p)*A.dpr,ctx.canvas.height);}else{const a0=-Math.PI/2;ctx.moveTo(A.cx*A.dpr,A.cy*A.dpr);ctx.arc(A.cx*A.dpr,A.cy*A.dpr,Math.max(A.w,A.h)*A.dpr,a0,a0+Math.PI*2*p);ctx.closePath();}ctx.clip();}
+    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(A.img,0,0,ctx.canvas.width,ctx.canvas.height);ctx.restore();}
+  ctx.setTransform(A.dpr,0,0,A.dpr,0,0);drawAxis(ctx,true);
+}
+function reveal(job,anim){
+  const ctx=$('#acv').getContext('2d'),t0=performance.now(),dur=anim&&!RM?1400:0;$('#amsg').hidden=true;
+  const step=now=>{if(job!==A.job)return;const p=dur&&!document.hidden?clamp((now-t0)/dur,0,1):1;const e=1-Math.pow(1-p,2);paintBase(ctx,e);
+    if(p<1)requestAnimationFrame(step);else{A.ready=true;drawOver();}};
+  if(document.hidden||!dur)step(t0+dur);else requestAnimationFrame(step);
+  setTimeout(()=>{if(job===A.job&&!A.ready){paintBase(ctx,1);A.ready=true;drawOver();}},dur+200);
+}
+function drawAxis(ctx,labels){
+  ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
+  const NCH=D.NCH;
+  if(A.mode==='arc'){
+    const y=A.axis;
+    ctx.fillStyle='rgba(236,230,216,.35)';ctx.fillRect(A.L,y-0.5,A.W,1);
+    for(let c=0;c<NCH;c++){const x0=xAt(D.chStart[c]),w=Math.max(0.55,D.chLen[c]/D.N*A.W-0.25);const bh=3+19*Math.sqrt(D.chLen[c]/176);
+      const bi=D.chBook[c];ctx.fillStyle=A.color==='section'?rgba(SEC_COL[D.books[bi].s],bi%2?0.55:0.8):(bi%2?'rgba(214,208,196,.42)':'rgba(236,230,216,.7)');ctx.fillRect(x0,y-1-bh,w,bh);}
+    // testament mark
+    const xm=xAt(D.bookStart[39]);ctx.fillStyle=GOLD;ctx.fillRect(xm-0.5,y-30,1,36);
+    if(!labels)return;
+    // section band
+    ctx.textBaseline='alphabetic';
+    const narrow=A.w<700;
+    D.sections.forEach((name,si)=>{let b0=-1,b1=-1;D.books.forEach((b,bi)=>{if(b.s===si){if(b0<0)b0=bi;b1=bi;}});
+      const x0=xAt(D.bookStart[b0]),x1=xAt(D.bookStart[b1+1]);ctx.fillStyle=rgba(SEC_COL[si],.75);ctx.fillRect(x0+1,y-36,Math.max(1,x1-x0-2),1.5);
+      ctx.font=`600 ${narrow?9:10}px ${MONO}`;const lab=name.toUpperCase();const tw=ctx.measureText(lab).width;
+      if(tw<x1-x0-4){ctx.fillStyle=mixW(SEC_COL[si],.35);ctx.fillText(lab,(x0+x1)/2-tw/2,y-42);}
+      else{const sh=({"The Law":"LAW","Poetry & Wisdom":"POETRY","Major Prophets":"MAJ PROPH","Minor Prophets":"MIN","Paul's Letters":"PAUL","General Letters":"GEN","Revelation":"REV","Gospels":"GOSPELS","History":"HISTORY","Acts":"ACTS"})[name]||'';const sw=ctx.measureText(sh).width;if(sw<x1-x0-2){ctx.fillStyle=mixW(SEC_COL[si],.35);ctx.fillText(sh,(x0+x1)/2-sw/2,y-42);}}});
+    // big book labels under the axis
+    ctx.font=`500 9.5px ${MONO}`;ctx.fillStyle='rgba(200,193,178,.55)';ctx.textBaseline='top';
+    const placed=[];
+    D.books.forEach((b,bi)=>{const x0=xAt(D.bookStart[bi]),x1=xAt(D.bookStart[bi+1]);const lab=b.a.toUpperCase();const tw=ctx.measureText(lab).width;if(tw+6>x1-x0)return;const x=(x0+x1)/2-tw/2;ctx.fillText(lab,x,y+5);placed.push(x);});
+    ctx.textBaseline='alphabetic';
+  }else{
+    const {cx,cy,R}=A;
+    ctx.strokeStyle='rgba(236,230,216,.3)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,R,ang(0),ang(D.N));ctx.stroke();
+    for(let c=0;c<NCH;c++){const a=ang(D.chStart[c]+D.chLen[c]/2);const bh=2.5+16*Math.sqrt(D.chLen[c]/176);const bi=D.chBook[c];
+      ctx.strokeStyle=A.color==='section'?rgba(SEC_COL[D.books[bi].s],bi%2?0.55:0.85):(bi%2?'rgba(214,208,196,.4)':'rgba(236,230,216,.7)');
+      ctx.lineWidth=Math.max(0.6,Math.min(2.2,D.chLen[c]/D.N*Math.PI*2*R*0.85));ctx.beginPath();ctx.moveTo(cx+Math.cos(a)*(R+2),cy+Math.sin(a)*(R+2));ctx.lineTo(cx+Math.cos(a)*(R+2+bh),cy+Math.sin(a)*(R+2+bh));ctx.stroke();}
+    const am=ang(D.bookStart[39]);ctx.strokeStyle=GOLD;ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(cx+Math.cos(am)*(R-8),cy+Math.sin(am)*(R-8));ctx.lineTo(cx+Math.cos(am)*(R+26),cy+Math.sin(am)*(R+26));ctx.stroke();
+    if(!labels)return;
+    D.sections.forEach((name,si)=>{let b0=-1,b1=-1;D.books.forEach((b,bi)=>{if(b.s===si){if(b0<0)b0=bi;b1=bi;}});
+      const a0=ang(D.bookStart[b0]),a1=ang(D.bookStart[b1+1]);ctx.strokeStyle=rgba(SEC_COL[si],.8);ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(cx,cy,R+24,a0+0.004,a1-0.004);ctx.stroke();});
+    ctx.font=`500 9.5px ${MONO}`;ctx.textBaseline='middle';
+    D.books.forEach((b,bi)=>{const a0=ang(D.bookStart[bi]),a1=ang(D.bookStart[bi+1]);const len=(a1-a0)*(R+34);const lab=b.a.toUpperCase();const tw=ctx.measureText(lab).width;if(len<13)return;
+      const a=(a0+a1)/2,x=cx+Math.cos(a)*(R+34),y=cy+Math.sin(a)*(R+34);ctx.save();ctx.translate(x,y);let rot=a;if(Math.cos(a)<0)rot+=Math.PI;ctx.rotate(rot);ctx.fillStyle=rgba(SEC_COL[b.s],.85);ctx.fillText(lab,Math.cos(a)<0?-tw:0,0);ctx.restore();});
+    ctx.textBaseline='alphabetic';
+  }
+}
+function chapterArcs(ctx,c,style,alpha){
+  const v0=D.chStart[c],v1=D.chStart[c+1];ctx.strokeStyle=style;ctx.globalAlpha=alpha;ctx.beginPath();let n=0;
+  for(let v=v0;v<v1;v++){const p=posV(v);
+    for(let k=D.start[v];k<D.start[v+1];k++){if(D.votes[k]<A.mv)continue;const q=posV(D.to[k]);if(curve(ctx,p[0],p[1],q[0],q[1]))n++;if(n%400===399){ctx.stroke();ctx.beginPath();}}
+    for(let r=D.inStart[v];r<D.inStart[v+1];r++){const k=D.inRef[r];if(D.votes[k]<A.mv)continue;const f=D.from[k];if(D.vCh[f]===c)continue;const q=posV(f);if(curve(ctx,p[0],p[1],q[0],q[1]))n++;if(n%400===399){ctx.stroke();ctx.beginPath();}}}
+  ctx.stroke();ctx.globalAlpha=1;
+}
+function labelAt(ctx,txt,x,y,placed,color,font){
+  ctx.font=font||`600 11px ${MONO}`;const tw=ctx.measureText(txt).width;let lx=clamp(x-tw/2,4,A.w-tw-4);
+  for(let t=0;t<6;t++){const box=[lx-3,y-11,lx+tw+3,y+4];if(!placed.some(b=>!(box[2]<b[0]||box[0]>b[2]||box[3]<b[1]||box[1]>b[3]))){placed.push(box);ctx.lineWidth=4;ctx.strokeStyle='rgba(4,5,7,.92)';ctx.strokeText(txt,lx,y);ctx.fillStyle=color;ctx.fillText(txt,lx,y);return true;}y+=14;}
+  return false;
+}
+function verseArcs(ctx,v,color,strong,labels,placed){
+  const nb=neighbors(v,A.mv);const p=posV(v);
+  ctx.lineWidth=strong?1.3:1;ctx.globalCompositeOperation='lighter';
+  nb.forEach((e,i)=>{const q=posV(e.v);ctx.strokeStyle=color;ctx.globalAlpha=strong?clamp(0.35+e.votes/60,0.35,0.95):0.6;ctx.beginPath();if(curve(ctx,p[0],p[1],q[0],q[1]))ctx.stroke();});
+  ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+  if(labels){
+    const top=nb.slice(0,labels);
+    for(const e of top){const q=posV(e.v);let lx,ly;
+      if(A.mode==='arc'){const rx=Math.abs(q[0]-p[0])/2;lx=(p[0]+q[0])/2;ly=A.axis+rx*A.sy+14;if(ly>A.h-6)ly=A.h-6;}
+      else{const a=Math.atan2(q[1]-A.cy,q[0]-A.cx);lx=A.cx+Math.cos(a)*(A.R-16);ly=A.cy+Math.sin(a)*(A.R-16)+4;}
+      labelAt(ctx,ref(e.v),lx,ly,placed,mixW(color,.35));
+    }
+  }
+  return nb;
+}
+function marker(ctx,v,color,r=3.2){const p=posV(v);ctx.fillStyle=color;ctx.beginPath();ctx.arc(p[0],p[1],r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(4,5,7,.9)';ctx.lineWidth=1.5;ctx.stroke();}
+function chBand(ctx,c,color,alpha){
+  ctx.globalAlpha=alpha;ctx.fillStyle=color;
+  if(A.mode==='arc'){const x0=xAt(D.chStart[c]),x1=xAt(D.chStart[c+1]);ctx.fillRect(x0-1,A.axis-24,Math.max(2,x1-x0+2),26);}
+  else{const a0=ang(D.chStart[c]),a1=ang(D.chStart[c+1]);ctx.strokeStyle=color;ctx.lineWidth=20;ctx.beginPath();ctx.arc(A.cx,A.cy,A.R+12,a0-0.004,a1+0.004);ctx.stroke();}
+  ctx.globalAlpha=1;
+}
+function drawOver(){
+  if(!D)return;const cv=$('#aov'),ctx=cv.getContext('2d');ctx.setTransform(A.dpr,0,0,A.dpr,0,0);ctx.clearRect(0,0,A.w,A.h);
+  const placed=[];ctx.textBaseline='alphabetic';
+  const focus=S.view==='christ'?!!A.thread:(A.hovCh>=0||A.selV>=0||A.selCh>=0||A.preview>=0||!!A.previewPair);
+  if(focus&&A.ready){ctx.fillStyle=S.view==='christ'?'rgba(4,5,7,.62)':'rgba(4,5,7,.5)';if(A.mode==='arc')ctx.fillRect(0,A.axis+1,A.w,A.h-A.axis-1);else{ctx.beginPath();ctx.arc(A.cx,A.cy,A.R-0.5,0,Math.PI*2);ctx.fill();}}
+  if(S.view==='christ'){drawThread(ctx,placed);return;}
+  if(A.hovCh>=0&&A.hovCh!==A.selCh&&A.preview<0){chBand(ctx,A.hovCh,'#FFFFFF',0.14);ctx.globalCompositeOperation='lighter';ctx.lineWidth=0.8;chapterArcs(ctx,A.hovCh,'rgb(255,255,255)',A.selV>=0?0.22:0.3);ctx.globalCompositeOperation='source-over';}
+  if(A.selV>=0){chBand(ctx,D.vCh[A.selV],GOLD,0.2);verseArcs(ctx,A.selV,GOLD,true,A.preview>=0?0:10,placed);marker(ctx,A.selV,'#FFF4D6',3.6);
+    const p=posV(A.selV);if(A.mode==='arc')labelAt(ctx,ref(A.selV).toUpperCase(),p[0],A.axis-52,placed,'#FFF4D6',`600 12px ${MONO}`);}
+  else if(A.selCh>=0){chBand(ctx,A.selCh,GOLD,0.22);ctx.globalCompositeOperation='lighter';ctx.lineWidth=0.9;chapterArcs(ctx,A.selCh,GOLD,0.4);ctx.globalCompositeOperation='source-over';
+    const p=posC(A.selCh);if(A.mode==='arc')labelAt(ctx,chName(A.selCh,false).toUpperCase(),p[0],A.axis-52,placed,'#FFF4D6',`600 12px ${MONO}`);}
+  if(A.preview>=0){verseArcs(ctx,A.preview,'#FFFFFF',true,6,placed);marker(ctx,A.preview,'#FFFFFF');}
+  if(A.previewPair){const [a,b]=A.previewPair;const p=posV(a),q=posV(b);ctx.strokeStyle='#FFFFFF';ctx.lineWidth=2;ctx.shadowColor='rgba(255,255,255,.8)';ctx.shadowBlur=8;ctx.beginPath();curve(ctx,p[0],p[1],q[0],q[1]);ctx.stroke();ctx.shadowBlur=0;marker(ctx,a,'#fff');marker(ctx,b,'#fff');}
+  if(A.selV<0&&A.selCh<0&&A.hovCh<0&&A.preview<0&&!A.previewPair&&A.longest.length){
+    // the longest thread, as a quiet starting point
+    const L=A.longest[0];const p=posV(L.a),q=posV(L.b);ctx.strokeStyle=GOLD;ctx.lineWidth=1.6;ctx.shadowColor='rgba(226,176,74,.7)';ctx.shadowBlur=10;ctx.beginPath();curve(ctx,p[0],p[1],q[0],q[1]);ctx.stroke();ctx.shadowBlur=0;
+    marker(ctx,L.a,GOLD);marker(ctx,L.b,GOLD);
+    const cap=`${ref(L.a,true).toUpperCase()}   ·   ${ref(L.b,true).toUpperCase()}`;ctx.font=`600 ${A.w<560?13:16}px ${SERIF}`;ctx.letterSpacing='2px';
+    const tw=ctx.measureText(cap).width;let y=A.mode==='arc'?A.axis+(q[0]-p[0])/2*A.sy+26:A.cy+6;if(A.mode==='arc'&&y>A.h-12)y=A.h-12;
+    ctx.fillStyle=GOLD;ctx.fillText(cap,A.w/2-tw/2,y);ctx.letterSpacing='0px';
+  }
+}
+function threadSteps(){return A.thread?A.thread.steps:[];}
+function drawThread(ctx,placed){
+  const th=A.thread;if(!th)return;const steps=th.steps;
+  const now=performance.now(),dur=RM?0:2600,prog=dur?clamp((now-A.threadT0)/dur,0,1):1;
+  const segs=steps.length-1,done=prog*segs;
+  ctx.lineCap='round';
+  for(let i=0;i<segs;i++){if(i>done)break;const frac=clamp(done-i,0,1);const p=posV(steps[i][0]),q=posV(steps[i+1][0]);
+    ctx.strokeStyle=GOLD;ctx.globalAlpha=A.stepHover>=0&&A.stepHover!==i&&A.stepHover!==i+1?0.45:1;ctx.lineWidth=1.8;ctx.shadowColor='rgba(226,176,74,.75)';ctx.shadowBlur=10;ctx.beginPath();
+    if(A.mode==='arc'&&q[0]<p[0]){curve(ctx,q[0],q[1],p[0],p[1],frac);}else curve(ctx,p[0],p[1],q[0],q[1],frac);ctx.stroke();}
+  ctx.shadowBlur=0;ctx.globalAlpha=1;
+  steps.forEach((s,i)=>{if(i>done+0.001)return;const hot=A.stepHover===i;marker(ctx,s[0],hot?'#FFFFFF':GOLD,hot?4.6:3.4);});
+  // labels
+  steps.forEach((s,i)=>{if(i>done+0.001)return;const p=posV(s[0]);let lx=p[0],ly;
+    if(A.mode==='arc')ly=A.axis+16+(i%2)*0;else{const a=Math.atan2(p[1]-A.cy,p[0]-A.cx);lx=A.cx+Math.cos(a)*(A.R-22);ly=A.cy+Math.sin(a)*(A.R-22)+4;}
+    labelAt(ctx,`${i+1} ${refR(s[0],s[1])}`,lx,ly,placed,A.stepHover===i?'#FFFFFF':'#F4D894',`600 ${A.w<560?10:11}px ${MONO}`);});
+  if(prog<1){if(!A.raf)A.raf=requestAnimationFrame(()=>{A.raf=0;drawOver();});}
+}
+function arcHit(e){
+  const r=$('#aov').getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;let p;
+  if(A.mode==='arc'){if(x<A.L-4||x>A.L+A.W+4)return null;p=(x-A.L)/A.W*D.N;}
+  else{const dx=x-A.cx,dy=y-A.cy,d=Math.hypot(dx,dy);if(d<A.R*0.12||d>A.R+70)return null;let a=Math.atan2(dy,dx)+Math.PI/2-GAP/2;a=((a%(Math.PI*2))+Math.PI*2)%(Math.PI*2);p=a/(Math.PI*2-GAP)*D.N;}
+  const v=clamp(Math.floor(p),0,D.N-1);return {v,c:D.vCh[v],x,y};
+}
+function topBooks(c){const cnt=new Uint32Array(66);const v0=D.chStart[c],v1=D.chStart[c+1];
+  for(let v=v0;v<v1;v++){for(let k=D.start[v];k<D.start[v+1];k++)if(D.votes[k]>=A.mv)cnt[D.vBook[D.to[k]]]++;for(let r=D.inStart[v];r<D.inStart[v+1];r++){const k=D.inRef[r];if(D.votes[k]>=A.mv&&D.vCh[D.from[k]]!==c)cnt[D.vBook[D.from[k]]]++;}}
+  return [...cnt].map((n,bi)=>({bi,n})).filter(x=>x.n).sort((a,b)=>b.n-a.n);}
+function showTip(el,html,x,y,host){el.innerHTML=html;el.hidden=false;const hw=host.clientWidth,hh=host.clientHeight,tw=el.offsetWidth,th=el.offsetHeight;let lx=x+16,ly=y+14;if(lx+tw>hw-8)lx=x-tw-16;if(ly+th>hh-8)ly=y-th-12;el.style.left=Math.max(6,lx)+'px';el.style.top=Math.max(6,ly)+'px';}
+function initArc(){
+  const ov=$('#aov'),tip=$('#atip'),st=$('#astage');let raf=0,pend=null;
+  const move=e=>{pend=e;if(raf)return;raf=requestAnimationFrame(()=>{raf=0;const e=pend;if(!A.ready&&S.view!=='christ')return;const h=arcHit(e);
+    if(S.view==='christ'){let best=-1,bd=14;threadSteps().forEach((s,i)=>{const p=posV(s[0]);const d=h?Math.hypot(p[0]-h.x,p[1]-h.y):99;if(d<bd){bd=d;best=i;}});
+      if(best!==A.stepHover){A.stepHover=best;drawOver();markStep(best);}
+      if(best>=0){const s=threadSteps()[best];showTip(tip,`<b>${esc(refR(s[0],s[1],true))}</b><span class="tx">${snip(s[0])}</span>`,h.x,h.y,st);}else tip.hidden=true;return;}
+    if(!h){if(A.hovCh!==-1){A.hovCh=-1;drawOver();}tip.hidden=true;return;}
+    if(h.c!==A.hovCh){A.hovCh=h.c;drawOver();}
+    const tb=topBooks(h.c).slice(0,3).map(x=>`${esc(D.books[x.bi].a)} ${fmtN(x.n)}`).join(' · ');
+    showTip(tip,`<b>${esc(chName(h.c))}</b> · ${D.chLen[h.c]} verses<br><span class="g">${fmtN(A.chRefs[h.c])}</span> cross references${tb?`<br>Most linked: ${tb}`:''}`,h.x,h.y,st);});};
+  ov.addEventListener('pointermove',move);
+  ov.addEventListener('pointerleave',()=>{A.hovCh=-1;A.stepHover=-1;tip.hidden=true;drawOver();markStep(-1);});
+  ov.addEventListener('click',e=>{const h=arcHit(e);if(!h)return;
+    if(S.view==='christ'){if(A.stepHover>=0){const el=document.querySelector(`.step[data-i="${A.stepHover}"]`);if(el)el.scrollIntoView({block:'nearest',behavior:RM?'auto':'smooth'});}return;}
+    A.selCh=h.c;A.selV=-1;A.hovCh=-1;tip.hidden=true;drawOver();renderArcDesk();});
+  seg('#t-mode',v=>{A.mode=v;A.w=0;layoutArc(true);});
+  seg('#t-mv',v=>{A.mv=+v;aggregate();renderBase(true);renderArcDesk();});
+  seg('#t-col',v=>{A.color=v;renderBase(false);});
+  new ResizeObserver(()=>{clearTimeout(A.rt);A.rt=setTimeout(()=>layoutArc(false),120);}).observe(st);
+}
+function layoutArc(anim){if(!D||$('#v-arc').hidden)return;const resized=sizeArc();if(!A.w)return;const intro=A.introAnim;A.introAnim=false;if(resized||anim||!A.img)renderBase(anim||intro);else drawOver();}
+function computeLongest(){
+  const c=[];for(let k=0;k<D.n;k++){if(D.votes[k]<10)continue;const a=D.from[k],b=D.to[k],d=Math.abs(b-a);if(d>24000)c.push({a:Math.min(a,b),b:Math.max(a,b),d,votes:D.votes[k]});}
+  c.sort((x,y)=>y.d-x.d);const seen=new Set();A.longest=c.filter(x=>{const key=x.a+'|'+x.b;if(seen.has(key))return false;seen.add(key);return true;}).slice(0,8);
+  const top=[];for(let ch=0;ch<D.NCH;ch++)top.push({c:ch,n:A.chRefs[ch]});A.top=top.sort((a,b)=>b.n-a.n).slice(0,8);
+}
+
+/* ---- arc desk ---- */
+function renderArcDesk(){
+  const el=$('#adesk');if(!D){el.innerHTML='';return;}
+  if(S.view==='christ'){renderChristDesk();return;}
+  if(A.selV>=0)el.innerHTML=verseDesk(A.selV);
+  else if(A.selCh>=0)el.innerHTML=chapterDesk(A.selCh);
+  else el.innerHTML=homeDesk();
+}
+function homeDesk(){
+  const L=A.longest.map((x,i)=>`<button type="button" class="row" data-pair="${x.a},${x.b}" data-v="${x.a}"><span class="rr"><span class="dot" style="background:${GOLD}"></span>${esc(ref(x.a))} → ${esc(ref(x.b))}</span><span class="rn">${fmtN(x.d)} verses apart</span></button>`).join('');
+  const T=A.top.map(x=>`<button type="button" class="row" data-ch="${x.c}"><span class="rr"><span class="dot" style="background:${SEC_COL[D.books[D.chBook[x.c]].s]}"></span>${esc(chName(x.c))}</span><span class="rn">${fmtN(x.n)} refs</span></button>`).join('');
+  return `<div class="k"><span>The whole Bible</span><span>${A.mv?A.mv+'+ votes':'all references'}</span></div>
+  <h2 class="dh">One story, woven together</h2>
+  <p class="p">Every chapter from Genesis to Revelation sits on the line, and each arc joins two passages that point to each other. Hover a chapter to light up its threads. Click one to read it and follow its cross references.</p>
+  <div class="stats"><div><b>${fmtN(A.nShown)}</b><span>Cross references</span></div><div><b>31,102</b><span>Verses</span></div><div><b>1,189</b><span>Chapters</span></div><div><b>66</b><span>Books</span></div></div>
+  <div class="sec"><div class="k"><span>Longest threads</span><span>10+ votes</span></div><div class="rows">${L}</div></div>
+  <div class="sec"><div class="k"><span>Most connected chapters</span></div><div class="rows">${T}</div></div>
+  <div class="sec"><div class="k"><span>Sections</span></div><div class="legend">${D.sections.map((s,i)=>`<span><i style="background:${SEC_COL[i]}"></i>${esc(s)}</span>`).join('')}</div></div>`;
+}
+function chapterDesk(c){
+  const bi=D.chBook[c],b=D.books[bi],tb=topBooks(c),max=tb.length?tb[0].n:1;
+  const bars=tb.slice(0,8).map(x=>`<button type="button" class="brow" data-bk="${x.bi}"><span>${esc(D.books[x.bi].n)}</span><i style="width:${Math.max(2,x.n/max*100)}%;background:${SEC_COL[D.books[x.bi].s]}"></i><em>${fmtN(x.n)}</em></button>`).join('');
+  let rows='';for(let v=D.chStart[c];v<D.chStart[c+1];v++){const n=neighbors(v,A.mv).length;rows+=`<button type="button" class="row vrow" data-v="${v}"><span class="vn">${D.vNum[v]}</span><span class="rt">${snip(v)}</span><span class="rn">${n}</span></button>`;}
+  const prev=c>0?`<button type="button" class="crumb" data-ch="${c-1}">← ${esc(chName(c-1,false))}</button>`:'';
+  const next=c<D.NCH-1?`<button type="button" class="crumb" data-ch="${c+1}">${esc(chName(c+1,false))} →</button>`:'';
+  return `<div class="crumbs"><button type="button" class="crumb" data-act="home">All threads</button><span class="sep">/</span>${prev}<span class="spacer"></span>${next}</div>
+  <div class="k"><span><span class="dot" style="background:${SEC_COL[b.s]}"></span>${esc(D.sections[b.s])}</span><span>Chapter</span></div>
+  <h2 class="dh">${esc(chName(c))}</h2><div class="sub">${D.chLen[c]} verses · ${fmtN(A.chRefs[c])} cross references</div>
+  <div class="sec"><div class="k"><span>Where it points</span><span>refs</span></div><div class="bars">${bars||'<span class="ld">No cross references at this vote level.</span>'}</div></div>
+  <div class="sec"><div class="k"><span>Verses</span><span>links</span></div><div class="rows">${rows}</div></div>`;
+}
+function verseDesk(v){
+  const c=D.vCh[v],b=D.books[D.vBook[v]],nb=neighbors(v,A.mv),lim=A.showAll?nb.length:40;
+  const rows=nb.slice(0,lim).map(e=>`<button type="button" class="row" data-v="${e.v}" data-pv="${e.v}"><span class="rr"><span class="dot" style="background:${colOf(e.v)}"></span>${esc(refR(e.v,e.span))}</span><span class="rn">${e.votes} votes</span><span class="rt">${snip(e.v)}</span></button>`).join('');
+  return `<div class="crumbs"><button type="button" class="crumb" data-act="home">All threads</button><span class="sep">/</span><button type="button" class="crumb" data-ch="${c}">${esc(chName(c))}</button></div>
+  <div class="k"><span><span class="dot" style="background:${SEC_COL[b.s]}"></span>${esc(D.sections[b.s])}</span><span>${S.ver.toUpperCase()}</span></div>
+  <h2 class="dh">${esc(ref(v,true))}</h2>${verseHTML(v)}
+  <div class="acts"><button type="button" class="btn gold" data-brain="${v}">Open in verse brain</button><a class="btn" href="${niv(v)}" target="_blank" rel="noopener">Read in NIV ↗</a></div>
+  <div class="sec"><div class="k"><span>Cross references</span><span>${fmtN(nb.length)}</span></div><div class="rows">${rows||'<span class="ld">None at this vote level.</span>'}</div>
+  ${nb.length>lim?`<div class="more"><button type="button" class="btn" data-act="all">Show all ${fmtN(nb.length)}</button></div>`:''}</div>`;
+}
+function initArcDesk(){
+  const el=$('#adesk');
+  el.addEventListener('click',e=>{
+    const t=e.target.closest('button');if(!t)return;
+    if(t.dataset.brain){go('brain',+t.dataset.brain);return;}
+    if(t.dataset.th){selectThread(t.dataset.th);return;}
+    if(t.dataset.step!==undefined){const s=A.thread.steps[+t.dataset.step];go('brain',s[0]);return;}
+    const act=t.dataset.act;
+    if(act==='home'){A.selCh=-1;A.selV=-1;A.preview=-1;A.previewPair=null;drawOver();renderArcDesk();return;}
+    if(act==='all'){A.showAll=true;renderArcDesk();return;}
+    if(act==='threads'){A.thread=null;renderChristDesk();drawOver();return;}
+    if(act==='replay'){A.threadT0=performance.now();drawOver();return;}
+    if(t.dataset.bk){const bi=+t.dataset.bk;A.selCh=D.bookCh0[bi];A.selV=-1;A.preview=-1;drawOver();renderArcDesk();el.scrollTop=0;return;}
+    if(t.dataset.ch){A.selCh=+t.dataset.ch;A.selV=-1;A.preview=-1;A.previewPair=null;drawOver();renderArcDesk();el.scrollTop=0;return;}
+    if(t.dataset.v){const v=+t.dataset.v;A.selV=v;A.selCh=D.vCh[v];A.preview=-1;A.previewPair=null;A.showAll=false;drawOver();renderArcDesk();el.scrollTop=0;}
+  });
+  el.addEventListener('pointerover',e=>{if(S.view==='christ'){const st=e.target.closest('.step');const i=st?+st.dataset.i:-1;if(i!==A.stepHover){A.stepHover=i;drawOver();}return;}
+    const t=e.target.closest('[data-pair],[data-pv],.vrow');
+    let pv=-1,pair=null;if(t){if(t.dataset.pair)pair=t.dataset.pair.split(',').map(Number);else if(t.dataset.pv||t.classList.contains('vrow'))pv=+t.dataset.v;}
+    if(pv===A.selV)pv=-1;
+    if(pv!==A.preview||String(pair)!==String(A.previewPair)){A.preview=pv;A.previewPair=pair;drawOver();}});
+  el.addEventListener('pointerleave',()=>{if(A.preview>=0||A.previewPair||A.stepHover>=0){A.preview=-1;A.previewPair=null;A.stepHover=-1;drawOver();}});
+}
+
+/* ================= CHRIST IN ALL SCRIPTURE ================= */
+function selectThread(id){A.thread=D.threads.find(t=>t.id===id)||null;A.threadT0=performance.now();A.stepHover=-1;renderChristDesk();drawOver();$('#adesk').scrollTop=0;
+  if(S.view==='christ'){const h=A.thread?'#christ-'+A.thread.id:'#christ';if(location.hash!==h)history.replaceState(null,'',h);}}
+function markStep(i){$$('.step').forEach(s=>s.classList.toggle('on',+s.dataset.i===i));}
+function renderChristDesk(){
+  const el=$('#adesk');const th=A.thread;
+  const luke=S.text.kjv?fmt(S.text.kjv[vid(41,24,27)]):'And beginning at Moses and all the prophets, he expounded unto them in all the scriptures the things concerning himself.';
+  if(!th){
+    const groups=[];D.threads.forEach(t=>{let g=groups.find(x=>x.name===t.group);if(!g)groups.push(g={name:t.group,list:[]});g.list.push(t);});
+    el.innerHTML=`<div class="k"><span>Christ in all Scripture</span><span>${D.threads.length} threads</span></div>
+    <h2 class="dh">From the first promise to the last prayer</h2>
+    <blockquote class="quote">${luke}<cite>Luke 24:27</cite></blockquote>
+    <p class="p">Each thread follows one promise or picture of Jesus Christ through the Bible, from where it is first given to where it is fulfilled. Pick one to see it drawn in gold across every book.</p>
+    ${groups.map(g=>`<div class="tgroup"><div class="k"><span>${esc(g.name)}</span></div>${g.list.map(t=>{const a=t.steps[0][0],z=t.steps[t.steps.length-1][0];return `<button type="button" class="tcard" data-th="${t.id}"><b>${esc(t.title)}</b><span>${t.steps.length} passages · ${esc(ref(a))} → ${esc(ref(z))}</span></button>`;}).join('')}</div>`).join('')}`;
+    return;
+  }
+  const steps=th.steps.map((s,i)=>{let lk='';if(i<th.steps.length-1){const vv=linkVotes(s[0],th.steps[i+1][0]);if(vv>=0)lk=`<span class="lk">↓ cross-referenced to the next passage · ${vv} reader votes</span>`;}
+    return `<li class="step" data-i="${i}"><button type="button" data-step="${i}" title="Open in verse brain"><span class="sr">${esc(refR(s[0],s[1],true))}</span><span class="st-t">${snip(s[0])}</span>${lk}</button></li>`;}).join('');
+  const a=th.steps[0][0],z=th.steps[th.steps.length-1][0];
+  el.innerHTML=`<div class="crumbs"><button type="button" class="crumb" data-act="threads">All ${D.threads.length} threads</button><span class="sep">/</span><span class="crumb" style="cursor:default">${esc(th.group)}</span></div>
+  <div class="k"><span>Thread</span><span>${S.ver.toUpperCase()}</span></div>
+  <h2 class="dh">${esc(th.title)}</h2><div class="sub">${th.steps.length} passages · ${esc(ref(a))} → ${esc(ref(z))} · ${fmtN(Math.abs(z-a))} verses</div>
+  <p class="blurb">${esc(th.blurb)}</p>
+  <div class="acts"><button type="button" class="btn gold" data-act="replay">Draw it again</button></div>
+  <ol class="steps">${steps}</ol>`;
+}
+
+/* ================= VERSE BRAIN ================= */
+const B={G:null,t:{x:0,y:0,k:1},w:0,h:0,dpr:1,ctx:null,hover:null,center:-1,K:24,depth:2,path:[],sprites:{},raf:0,dirty:true,cam:null,anim:null};
+const RING=360;
+const cang=v=>-Math.PI/2+(v+0.5)/D.N*Math.PI*2;
+function buildBrain(v,from){
+  const prev=new Map(B.G?B.G.nodes.map(n=>[n.v,n]):[]);const origin=from&&prev.get(from)?prev.get(from):null;
+  const nodes=[],links=[],by=new Map();
+  const add=n=>{const p=prev.get(n.v);n.sx=p?p.dx:(origin?origin.dx:0);n.sy=p?p.dy:(origin?origin.dy:0);nodes.push(n);by.set(n.v,n);return n;};
+  const c=add({v,lvl:0,r:10,votes:999});c.fx=0;c.fy=0;
+  const nb=neighbors(v).slice(0,B.K);const maxV=Math.max(1,...nb.map(e=>e.votes));
+  nb.forEach((e,i)=>{const rr=130+130*(i/Math.max(1,nb.length-1));const a=cang(e.v);const n=add({v:e.v,lvl:1,rank:i,rr,votes:e.votes,span:e.span,dir:e.dir,r:3.6+4.6*Math.sqrt(e.votes/maxV),ax:Math.cos(a)*rr,ay:Math.sin(a)*rr});
+    n.x=n.sx||n.ax;n.y=n.sy||n.ay;if(!prev.get(e.v)&&!origin){n.x=n.ax;n.y=n.ay;}
+    links.push({source:c,target:n,kind:1,votes:e.votes});});
+  if(B.depth>1){const per=B.K>24?2:3,cap=B.K>24?90:72;let cnt=0;
+    for(const p of nodes.filter(n=>n.lvl===1)){if(cnt>=cap)break;let got=0;
+      for(const e of neighbors(p.v)){if(got>=per||cnt>=cap)break;if(by.has(e.v))continue;const a=Math.atan2(p.ay,p.ax);const n=add({v:e.v,lvl:2,votes:e.votes,r:2.5,parent:p});n.x=p.ax+Math.cos(a)*60+(Math.random()-.5)*30;n.y=p.ay+Math.sin(a)*60+(Math.random()-.5)*30;links.push({source:p,target:n,kind:2,votes:e.votes});got++;cnt++;}}}
+  // cross links among first ring
+  const L1=nodes.filter(n=>n.lvl===1);
+  for(let i=0;i<L1.length;i++){const set=new Set(neighbors(L1[i].v,1).map(e=>e.v));for(let j=i+1;j<L1.length;j++)if(set.has(L1[j].v))links.push({source:L1[i],target:L1[j],kind:3});}
+  if(window.d3&&d3.forceSimulation){
+    const sim=d3.forceSimulation(nodes)
+      .force('link',d3.forceLink(links.filter(l=>l.kind!==1)).distance(l=>l.kind===2?56:120).strength(l=>l.kind===2?0.6:0.02))
+      .force('charge',d3.forceManyBody().strength(n=>n.lvl===2?-22:n.lvl===1?-110:-200).distanceMax(320))
+      .force('collide',d3.forceCollide(n=>n.r+(n.lvl===2?4:9)).iterations(2))
+      .force('radial',d3.forceRadial(n=>n.lvl===1?n.rr:n.lvl===2?Math.hypot(n.parent.ax,n.parent.ay)+62:0).strength(n=>n.lvl===1?0.5:n.lvl===2?0.12:0))
+      .force('x',d3.forceX(n=>n.lvl===1?n.ax:n.lvl===2?n.parent.ax*1.3:0).strength(n=>n.lvl===1?0.035:n.lvl===2?0.012:0))
+      .force('y',d3.forceY(n=>n.lvl===1?n.ay:n.lvl===2?n.parent.ay*1.3:0).strength(n=>n.lvl===1?0.035:n.lvl===2?0.012:0))
+      .stop();
+    for(let i=0;i<280;i++)sim.tick();
+  }else nodes.forEach(n=>{if(n.lvl===1){n.x=n.ax;n.y=n.ay;}});
+  nodes.forEach(n=>{n.dx=n.x;n.dy=n.y;if(n.sx===undefined||(n.sx===0&&n.sy===0&&n!==c&&!origin)){n.sx=n.x*0.2;n.sy=n.y*0.2;}});
+  B.G={nodes,links,by,maxV};B.center=v;B.anim={t0:performance.now(),dur:RM?0:750};
+}
+function brainPos(n,e){return [n.sx+(n.dx-n.sx)*e,n.sy+(n.dy-n.sy)*e];}
+function sprite(color){if(B.sprites[color])return B.sprites[color];const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const gr=g.createRadialGradient(32,32,0,32,32,32);
+  const n=parseInt(color.slice(1),16),rgb=`${n>>16},${(n>>8)&255},${n&255}`;gr.addColorStop(0,`rgba(${rgb},.95)`);gr.addColorStop(.22,`rgba(${rgb},.5)`);gr.addColorStop(.55,`rgba(${rgb},.12)`);gr.addColorStop(1,`rgba(${rgb},0)`);g.fillStyle=gr;g.fillRect(0,0,64,64);return B.sprites[color]=c;}
+function drawBrain(now){
+  const G=B.G,ctx=B.ctx;if(!G||!ctx||!B.w)return;const {w,h,dpr,t}=B;
+  let e=1;if(B.anim&&B.anim.dur){const p=clamp((now-B.anim.t0)/B.anim.dur,0,1);e=1-Math.pow(1-p,3);if(p>=1)B.anim=null;}else B.anim=null;
+  for(const n of G.nodes){const p=brainPos(n,e);n.x=p[0];n.y=p[1];}
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';ctx.fillStyle='#040507';ctx.fillRect(0,0,w,h);
+  const gs=30*t.k;if(gs>10){ctx.fillStyle='rgba(236,230,216,0.07)';const ox=((t.x%gs)+gs)%gs,oy=((t.y%gs)+gs)%gs;for(let x=ox;x<w;x+=gs)for(let y=oy;y<h;y+=gs)ctx.fillRect(x,y,1,1);}
+  ctx.setTransform(dpr*t.k,0,0,dpr*t.k,dpr*t.x,dpr*t.y);
+  // canon ring: where in the Bible each verse lives
+  D.sections.forEach((s,si)=>{let b0=-1,b1=-1;D.books.forEach((b,bi)=>{if(b.s===si){if(b0<0)b0=bi;b1=bi;}});const a0=cang(D.bookStart[b0]-0.5),a1=cang(D.bookStart[b1+1]-0.5);
+    ctx.strokeStyle=rgba(SEC_COL[si],.32);ctx.lineWidth=3/t.k;ctx.beginPath();ctx.arc(0,0,RING,a0+0.006,a1-0.006);ctx.stroke();});
+  ctx.globalCompositeOperation='lighter';
+  const hov=B.hover;
+  for(const n of G.nodes){if(n.lvl===0)continue;const a=cang(n.v);ctx.fillStyle=rgba(colOf(n.v),n.lvl===1?0.9:0.45);const rr=n.lvl===1?2.6:1.6;ctx.beginPath();ctx.arc(Math.cos(a)*RING,Math.sin(a)*RING,rr/t.k*1.4,0,Math.PI*2);ctx.fill();
+    if(n===hov){ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1/t.k;ctx.setLineDash([3/t.k,4/t.k]);ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(Math.cos(a)*RING,Math.sin(a)*RING);ctx.stroke();ctx.setLineDash([]);}}
+  { const a=cang(B.center);ctx.fillStyle=GOLD;ctx.beginPath();ctx.arc(Math.cos(a)*RING,Math.sin(a)*RING,4/t.k*1.3,0,Math.PI*2);ctx.fill(); }
+  for(const l of G.links){const a=l.source,b=l.target;let al,col,lw;
+    if(l.kind===1){col=colOf(b.v);al=0.22+0.5*(l.votes/G.maxV);lw=0.8+1.6*(l.votes/G.maxV);}
+    else if(l.kind===2){col=colOf(b.v);al=0.16;lw=0.7;}
+    else{col='#C9C2B3';al=0.1;lw=0.6;}
+    if(hov&&(a===hov||b===hov)){al=0.85;}
+    ctx.strokeStyle=rgba(col,al);ctx.lineWidth=lw/t.k;ctx.beginPath();
+    if(l.kind===3){const mx=(a.x+b.x)/2*0.75,my=(a.y+b.y)/2*0.75;ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo(mx,my,b.x,b.y);}else{ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);}ctx.stroke();}
+  if(!RM){const T=now/1000,sp=sprite('#F4D894');let i=0;
+    for(const l of G.links){if(l.kind===3)continue;const ph=((T*0.5-(l.kind===2?0.65:0)-(i++%9)*0.09)%1.5+1.5)%1.5;if(ph>1)continue;const a=l.source,b=l.target;const x=a.x+(b.x-a.x)*ph,y=a.y+(b.y-a.y)*ph;const sz=(l.kind===1?15:9)/Math.sqrt(t.k);ctx.globalAlpha=(1-ph*0.5)*(l.kind===1?0.9:0.5);ctx.drawImage(sp,x-sz/2,y-sz/2,sz,sz);}ctx.globalAlpha=1;}
+  for(const n of G.nodes){const col=n.lvl===0?GOLD:colOf(n.v);const tw=RM?1:1+0.1*Math.sin(now/650+n.v*0.37);const big=n===hov?1.35:1;const gsz=n.r*(n.lvl===0?8:6.5)*tw*big;ctx.globalAlpha=n.lvl===2?0.7:1;ctx.drawImage(sprite(col),n.x-gsz/2,n.y-gsz/2,gsz,gsz);}
+  ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+  for(const n of G.nodes){const col=n.lvl===0?'#FFF4D6':mixW(colOf(n.v),.4);ctx.fillStyle=col;ctx.globalAlpha=n.lvl===2?0.75:1;ctx.beginPath();ctx.arc(n.x,n.y,n.r*(n.lvl===0?0.62:0.6),0,Math.PI*2);ctx.fill();}
+  ctx.globalAlpha=1;
+  const c0=G.nodes[0];const pr=RM?0:Math.sin(now/420)*1.5;ctx.strokeStyle='rgba(226,176,74,.95)';ctx.lineWidth=1.6/t.k;ctx.beginPath();ctx.arc(c0.x,c0.y,c0.r+6+pr,0,Math.PI*2);ctx.stroke();
+  if(hov&&hov!==c0){ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=1.2/t.k;ctx.beginPath();ctx.arc(hov.x,hov.y,hov.r+4/t.k,0,Math.PI*2);ctx.stroke();}
+  // labels in screen space
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.textBaseline='middle';
+  const placed=[];
+  const label=(n,txt,font,fill,pri)=>{const sx=n.x*t.k+t.x,sy=n.y*t.k+t.y;if(sx<-60||sx>w+60||sy<-20||sy>h+20)return;ctx.font=font;const tw=ctx.measureText(txt).width;
+    let x,y=sy;if(n.lvl===0){x=sx-tw/2;y=sy+n.r*t.k+22;}else{x=sx+n.r*t.k*0.7+7;if(x+tw>w-8)x=sx-n.r*t.k*0.7-7-tw;}
+    const box=[x-3,y-8,x+tw+3,y+8];if(pri<2&&placed.some(b=>!(box[2]<b[0]||box[0]>b[2]||box[3]<b[1]||box[1]>b[3])))return;placed.push(box);
+    ctx.lineWidth=3.5;ctx.strokeStyle='rgba(4,5,7,.92)';ctx.strokeText(txt,x,y);ctx.fillStyle=fill;ctx.fillText(txt,x,y);};
+  label(c0,ref(c0.v,true).toUpperCase(),`600 13px ${MONO}`,'#FFF4D6',2);
+  if(hov&&hov!==c0)label(hov,refR(hov.v,hov.span),`600 11.5px ${MONO}`,'#FFFFFF',2);
+  // section labels on the ring
+  ctx.font=`600 9.5px ${MONO}`;
+  D.sections.forEach((s,si)=>{let b0=-1,b1=-1;D.books.forEach((b,bi)=>{if(b.s===si){if(b0<0)b0=bi;b1=bi;}});const am=cang((D.bookStart[b0]+D.bookStart[b1+1])/2);const R2=RING+18;const sx=Math.cos(am)*R2*t.k+t.x,sy=Math.sin(am)*R2*t.k+t.y;const lab=s.toUpperCase();const tw=ctx.measureText(lab).width;
+    const span=(D.bookStart[b1+1]-D.bookStart[b0])/D.N*Math.PI*2*RING*t.k;if(span<tw*0.6)return;let x=sx-tw/2;if(Math.cos(am)>0.3)x=sx;else if(Math.cos(am)<-0.3)x=sx-tw;ctx.fillStyle=rgba(SEC_COL[si],.75);ctx.fillText(lab,x,sy);});
+  const L1=G.nodes.filter(n=>n.lvl===1).sort((a,b)=>b.votes-a.votes);
+  for(const n of L1)label(n,refR(n.v,n.span),`500 11px ${MONO}`,'rgba(236,230,216,.86)',1);
+  if(t.k>1.35)for(const n of G.nodes)if(n.lvl===2)label(n,ref(n.v),`500 10px ${MONO}`,'rgba(200,193,178,.6)',0);
+}
+function brainLoop(now){B.raf=0;if(S.view!=='brain'||document.hidden)return;
+  if(B.cam){const c=B.cam,p=Math.min(1,(now-c.t0)/c.dur),e=1-Math.pow(1-p,3);B.t={x:c.x0+(c.x1-c.x0)*e,y:c.y0+(c.y1-c.y0)*e,k:c.k0+(c.k1-c.k0)*e};if(p>=1)B.cam=null;B.dirty=true;}
+  if(!RM||B.dirty||B.anim){drawBrain(now);B.dirty=false;}B.raf=requestAnimationFrame(brainLoop);}
+function kick(){B.dirty=true;if(!B.raf&&S.view==='brain')B.raf=requestAnimationFrame(brainLoop);}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)kick();});
+function sizeBrain(){const st=$('#bstage'),w=st.clientWidth,h=st.clientHeight,dpr=Math.min(2,devicePixelRatio||1);if(!w||!h)return false;document.documentElement.style.setProperty('--bdesk-h',h+'px');$('#bdesk').style.maxHeight=innerWidth>1100?h+'px':'none';
+  if(w===B.w&&h===B.h&&dpr===B.dpr)return false;const cv=$('#bcv');cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);B.w=w;B.h=h;B.dpr=dpr;B.ctx=cv.getContext('2d');B.dirty=true;return true;}
+function camTo(x,y,k,anim){if(!anim||RM){B.t={x,y,k};B.cam=null;kick();return;}B.cam={x0:B.t.x,y0:B.t.y,k0:B.t.k,x1:x,y1:y,k1:k,t0:performance.now(),dur:700};kick();}
+function fitBrain(anim){const G=B.G;if(!G||!B.w)return;let r=0;for(const n of G.nodes)r=Math.max(r,Math.hypot(n.dx,n.dy)+n.r+14);r=Math.max(r,RING+34);
+  const k=clamp(Math.min(B.w,B.h)/(2*r*1.04),0.25,2.4);camTo(B.w/2,B.h/2,k,anim);}
+function brainHit(e){const r=$('#bcv').getBoundingClientRect(),sx=e.clientX-r.left,sy=e.clientY-r.top;const {t}=B;const wx=(sx-t.x)/t.k,wy=(sy-t.y)/t.k;let best=null,bd=Infinity;
+  for(const n of B.G.nodes){const d=Math.hypot(n.x-wx,n.y-wy);const lim=n.r+8/t.k;if(d<lim&&d<bd){bd=d;best=n;}}return {n:best,sx,sy};}
+function centerOn(v,from,push=true){
+  if(!D)return;if(push){if(B.path[B.path.length-1]!==v){B.path.push(v);if(B.path.length>14)B.path.shift();}}
+  B.hover=null;$('#btip').hidden=true;buildBrain(v,from);sizeBrain();fitBrain(!!from);renderBrainDesk();kick();
+  const h='#'+slugV(v);if(S.view==='brain'&&location.hash!==h)history.replaceState(null,'',h);
+}
+function initBrain(){
+  const cv=$('#bcv'),tip=$('#btip'),st=$('#bstage');const ptr=new Map();let drag=null,moved=false,pinch=null;
+  cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=false;
+    if(ptr.size===1)drag={x:e.clientX,y:e.clientY,tx:B.t.x,ty:B.t.y};
+    else if(ptr.size===2){const [a,b]=[...ptr.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),k:B.t.k,tx:B.t.x,ty:B.t.y,mx:(a.x+b.x)/2,my:(a.y+b.y)/2};drag=null;}});
+  cv.addEventListener('pointermove',e=>{if(!B.G)return;if(ptr.has(e.pointerId))ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pinch&&ptr.size===2){const [a,b]=[...ptr.values()];const r=cv.getBoundingClientRect();const k=clamp(pinch.k*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d,0.2,6);const mx=pinch.mx-r.left,my=pinch.my-r.top;B.t={k,x:mx-(mx-pinch.tx)*(k/pinch.k),y:my-(my-pinch.ty)*(k/pinch.k)};moved=true;kick();return;}
+    if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4){moved=true;cv.classList.add('grab');}if(moved){B.t={...B.t,x:drag.tx+dx,y:drag.ty+dy};B.cam=null;kick();tip.hidden=true;return;}}
+    const h=brainHit(e);if(h.n!==B.hover){B.hover=h.n;cv.classList.toggle('pt',!!h.n);kick();}
+    if(h.n){const n=h.n;const vt=n.lvl===0?'Center':n.dir===1?`${ref(B.center)} points here`:n.dir===2?`Points to ${ref(B.center)}`:n.dir===3?'Linked both ways':`via ${ref(n.parent.v)}`;
+      showTip(tip,`<b>${esc(refR(n.v,n.span,true))}</b>${n.lvl?` · <span class="g">${n.votes} votes</span>`:''}<br>${esc(vt)}<span class="tx">${snip(n.v)}</span>`,h.sx,h.sy,st);}else tip.hidden=true;});
+  const up=e=>{ptr.delete(e.pointerId);if(ptr.size<2)pinch=null;if(ptr.size===0){cv.classList.remove('grab');
+    if(!moved&&drag&&B.G){const h=brainHit(e);if(h.n&&h.n.v!==B.center){tip.hidden=true;centerOn(h.n.v,h.n.v);}}drag=null;}};
+  cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+  cv.addEventListener('pointerleave',()=>{B.hover=null;tip.hidden=true;kick();});
+  cv.addEventListener('wheel',e=>{e.preventDefault();const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;const k=clamp(B.t.k*Math.exp(-e.deltaY*0.0015),0.2,6);B.t={k,x:mx-(mx-B.t.x)*(k/B.t.k),y:my-(my-B.t.y)*(k/B.t.k)};B.cam=null;kick();},{passive:false});
+  $('#zin').onclick=()=>camTo(B.w/2-(B.w/2-B.t.x)*1.35,B.h/2-(B.h/2-B.t.y)*1.35,B.t.k*1.35,true);
+  $('#zout').onclick=()=>camTo(B.w/2-(B.w/2-B.t.x)/1.35,B.h/2-(B.h/2-B.t.y)/1.35,B.t.k/1.35,true);
+  $('#zfit').onclick=()=>fitBrain(true);
+  seg('#b-k',v=>{B.K=+v;centerOn(B.center,null,false);});
+  seg('#b-d',v=>{B.depth=+v;centerOn(B.center,null,false);});
+  new ResizeObserver(()=>{if(S.view!=='brain')return;if(sizeBrain()){fitBrain(false);kick();}}).observe(st);
+  const dk=$('#bdesk');
+  dk.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
+    if(t.dataset.map){const v=+t.dataset.map;A.selV=v;A.selCh=D.vCh[v];go('threads');return;}
+    if(t.dataset.v){const v=+t.dataset.v;if(v!==B.center)centerOn(v,B.G&&B.G.by.has(v)?v:null);dk.scrollTop=0;}});
+  dk.addEventListener('pointerover',e=>{const t=e.target.closest('[data-v]');const n=t&&B.G?B.G.by.get(+t.dataset.v)||null:null;if(n!==B.hover){B.hover=n;kick();}});
+  dk.addEventListener('pointerleave',()=>{B.hover=null;kick();});
+}
+function renderBrainDesk(){
+  const el=$('#bdesk');if(!D||B.center<0){el.innerHTML='';return;}
+  const v=B.center,b=D.books[D.vBook[v]],G=B.G;
+  const L1=G.nodes.filter(n=>n.lvl===1);
+  const secCnt=new Array(10).fill(0);L1.forEach(n=>secCnt[secOf(n.v)]++);
+  const rows=L1.map(n=>`<button type="button" class="row" data-v="${n.v}"><span class="rr"><span class="dot" style="background:${colOf(n.v)}"></span>${esc(refR(n.v,n.span))}</span><span class="rn">${n.votes} votes</span><span class="rt">${snip(n.v)}</span></button>`).join('');
+  const total=neighbors(v).length;
+  el.innerHTML=`<div class="k"><span><span class="dot" style="background:${SEC_COL[b.s]}"></span>${esc(D.sections[b.s])} · ${esc(b.n)}</span><span>${S.ver.toUpperCase()}</span></div>
+  <h2 class="dh">${esc(ref(v,true))}</h2>${verseHTML(v)}
+  <div class="acts"><a class="btn" href="${niv(v)}" target="_blank" rel="noopener">Read in NIV ↗</a><button type="button" class="btn" data-map="${v}">See on the full map</button></div>
+  ${B.path.length>1?`<div class="sec"><div class="k"><span>Your path</span><span>${B.path.length} verses</span></div><div class="path">${B.path.map(p=>`<button type="button" data-v="${p}"${p===v?' class="on"':''}>${esc(ref(p))}</button>`).join('')}</div></div>`:''}
+  <div class="sec"><div class="k"><span>Connected verses</span><span>top ${L1.length} of ${fmtN(total)}</span></div><div class="rows">${rows||'<span class="ld">No cross references for this verse.</span>'}</div></div>
+  <div class="sec"><div class="k"><span>Where they are</span></div><div class="legend">${D.sections.map((s,i)=>`<span><i style="background:${SEC_COL[i]}"></i>${esc(s)}<em>${secCnt[i]||''}</em></span>`).join('')}</div>
+  <p class="note">The outer ring is the whole Bible, Genesis at the top running clockwise to Revelation. Each dot on it marks where a connected verse sits.</p></div>`;
+}
+
+/* ================= search ================= */
+function parseRef(q){
+  const m=q.trim().toLowerCase().replace(/\s+/g,' ').match(/^((?:[123]|i{1,3})\s?[a-z][a-z .']*?|[a-z][a-z .']*?)\s*(\d+)?(?:\s*[:.\s]\s*(\d+))?(?:\s*[-–]\s*\d+)?\s*$/);
+  if(!m)return null;let bk=m[1].replace(/^iii\s?/,'3').replace(/^ii\s?/,'2').replace(/^i\s(?=[a-z])/,'1').replace(/[\s.']/g,'');
+  let bi=D.alias.get(bk);if(bi===undefined){if(bk.length<2)return null;const cand=D.books.findIndex(b=>b.n.toLowerCase().replace(/\s/g,'').startsWith(bk));if(cand<0)return null;bi=cand;}
+  const nch=D.bookCh0[bi+1]-D.bookCh0[bi];let c=m[2]?+m[2]:0,v=m[3]?+m[3]:0;
+  if(nch===1&&c&&!v&&c>1){v=c;c=1;}
+  if(!c)return {bi};if(c>nch)return null;const ch=D.bookCh0[bi]+c-1;if(!v)return {bi,ch};if(v>D.chLen[ch])return null;return {bi,ch,v:D.chStart[ch]+v-1};
+}
+function initSearch(){
+  const q=$('#q'),box=$('#sugg');let items=[],on=-1;
+  const close=()=>{box.hidden=true;items=[];on=-1;};
+  const pick=it=>{close();q.blur();if(!it)return;
+    if(it.v!==undefined){if(S.view==='brain')centerOn(it.v,null);else if(S.view==='christ')go('brain',it.v);else{A.selV=it.v;A.selCh=D.vCh[it.v];A.showAll=false;drawOver();renderArcDesk();$('#adesk').scrollTop=0;}}
+    else if(it.ch!==undefined){if(S.view!=='threads')go('threads');A.selCh=it.ch;A.selV=-1;drawOver();renderArcDesk();$('#adesk').scrollTop=0;}};
+  const render=()=>{
+    const s=q.value.trim();if(!s||!D){close();return;}
+    items=[];let html='';const r=parseRef(s);
+    if(r){if(r.v!==undefined){items.push({v:r.v});html+=`<div class="sh">Verse</div><button type="button" data-i="0"><b>${esc(ref(r.v,true))}</b><span>${snip(r.v)}</span></button>`;}
+      else{const ch=r.ch!==undefined?r.ch:D.bookCh0[r.bi];items.push({ch});html+=`<div class="sh">Chapter</div><button type="button" data-i="0"><b>${esc(chName(ch))}</b><span>${D.chLen[ch]} verses</span></button>`;}}
+    const T=S.text[S.ver]||S.text.kjv;
+    if(T&&s.length>=3&&!(r&&r.v!==undefined)){const words=s.toLowerCase().split(/\s+/).filter(Boolean);let hits=0;const res=[];
+      for(let i=0;i<T.length;i++){const t=(T[i]||'').toLowerCase().replace(/[\[\]]/g,'');if(words.every(w=>t.includes(w))){hits++;if(res.length<30)res.push(i);}}
+      if(res.length){html+=`<div class="sh">${fmtN(hits)} verses with “${esc(s)}”${hits>30?' · first 30':''}</div>`;
+        const re=new RegExp('('+words.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','gi');
+        res.forEach(i=>{items.push({v:i});const t=plain(i);html+=`<button type="button" data-i="${items.length-1}"><b>${esc(ref(i))}</b><span>${esc(t).replace(re,'<mark>$1</mark>')}</span></button>`;});}}
+    else if(!T&&!r)html+='<div class="sh">Verse text is still loading…</div>';
+    if(!html)html='<div class="sh">No match. Try a reference like “Rom 8:28” or a word like “redeemer”.</div>';
+    box.innerHTML=html;box.hidden=false;on=-1;};
+  let tm=0;q.addEventListener('input',()=>{clearTimeout(tm);tm=setTimeout(render,120);});
+  q.addEventListener('focus',()=>{if(q.value.trim())render();});
+  q.addEventListener('keydown',e=>{if(e.key==='Escape'){close();return;}
+    const bs=[...box.querySelectorAll('button')];
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(!bs.length)return;e.preventDefault();on=(on+(e.key==='ArrowDown'?1:-1)+bs.length)%bs.length;bs.forEach((b,i)=>b.classList.toggle('on',i===on));bs[on].scrollIntoView({block:'nearest'});}
+    if(e.key==='Enter'){e.preventDefault();clearTimeout(tm);if(box.hidden)render();const i=on>=0?on:0;pick(items[i]);}});
+  box.addEventListener('mousedown',e=>e.preventDefault());
+  box.addEventListener('click',e=>{const b=e.target.closest('button');if(b)pick(items[+b.dataset.i]);});
+  document.addEventListener('click',e=>{if(!e.target.closest('.search'))close();});
+}
+
+/* ================= shell ================= */
+function seg(sel,fn){const el=$(sel);el.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.getAttribute('aria-pressed')==='true')return;el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));fn(b.dataset.v);});}
+function renderDesks(){if(!D)return;if(S.view==='brain')renderBrainDesk();else renderArcDesk();}
+function go(view,v){
+  S.view=view;
+  $$('.tabs a').forEach(a=>a.setAttribute('aria-selected',a.dataset.v===view?'true':'false'));
+  $('#v-arc').hidden=view==='brain';$('#v-brain').hidden=view!=='brain';
+  $('#ctl-threads').hidden=view!=='threads';$('#ctl-brain').hidden=view!=='brain';
+  const touch=matchMedia('(hover: none)').matches;
+  $('#ahint').textContent=view==='christ'?(touch?'Tap a gold dot to read the passage':'Hover a gold dot to read the passage'):(touch?'Tap a chapter to open it':'Hover a chapter · click to open it');
+  if(!D)return;
+  if(view==='brain'){const c=v!==undefined?v:(B.center>=0?B.center:(A.selV>=0?A.selV:vid(42,1,1)));sizeBrain();if(c!==B.center||!B.G)centerOn(c,null);else{renderBrainDesk();fitBrain(false);kick();}
+    const h='#'+slugV(B.center);if(location.hash!==h)history.replaceState(null,'',h);}
+  else{if(view==='christ'&&!A.thread)A.thread=null;A.hovCh=-1;A.preview=-1;A.previewPair=null;A.stepHover=-1;
+    if(view==='christ')A.threadT0=performance.now();
+    layoutArc(false);drawOver();renderArcDesk();
+    const h=view==='christ'?(A.thread?'#christ-'+A.thread.id:'#christ'):'#threads';if(location.hash!==h)history.replaceState(null,'',h);}
+}
+function route(){
+  const h=decodeURIComponent(location.hash.slice(1)).toLowerCase();
+  if(!h||h==='threads')return go('threads');
+  if(h==='brain')return go('brain');
+  if(h==='christ'){A.thread=null;return go('christ');}
+  if(h.startsWith('christ-')){A.thread=D.threads.find(t=>t.id===h.slice(7))||null;A.threadT0=performance.now();return go('christ');}
+  const m=h.match(/^(.+)-(\d+)-(\d+)$/)||h.match(/^(.+)-(\d+)$/);
+  if(m){const bi=D.books.findIndex((b,i)=>slugB(i)===m[1]);if(bi>=0){if(m[3]){const v=vid(bi,+m[2],+m[3]);if(v>=0)return go('brain',v);}else{const ch=D.bookCh0[bi]+(+m[2])-1;if(ch<D.bookCh0[bi+1]){A.selCh=ch;A.selV=-1;return go('threads');}}}}
+  go('threads');
+}
+async function boot(){
+  $$('.tabs a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const v=a.dataset.v;if(v==='christ'&&S.view!=='christ'){A.thread=A.thread||null;}go(v);}));
+  seg('#ver',v=>{S.ver=v;loadText(v);renderDesks();});
+  initArc();initArcDesk();initBrain();initSearch();
+  window.addEventListener('hashchange',()=>{if(D)route();});
+  try{
+    const r=await fetch('data/xrefs.json');if(!r.ok)throw new Error('HTTP '+r.status);D=buildData(await r.json());
+  }catch(err){$('#amsg').innerHTML=`<div><b>The threads did not load</b><span class="err">Could not read the cross-reference data (${esc(err.message)}). Reload the page to try again.</span></div>`;console.error(err);return;}
+  aggregate();computeLongest();
+  try{await Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]);}catch(e){}
+  A.introAnim=true;route();
+  loadText('kjv');
+}
+boot();
+})();
+</script>
+</body>
+</html>

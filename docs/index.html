@@ -179,7 +179,11 @@ h1{margin:2px 0 0;font-family:var(--f-display);font-weight:600;font-size:42px;li
 .quote{margin:12px 0 0;padding-left:14px;border-left:2px solid var(--gold);font-size:18px;font-style:italic;line-height:1.5;color:var(--vellum)}
 .quote cite{display:block;margin-top:4px;font-style:normal;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
 
-.foot{padding-block:8px 34px;color:var(--ash);font-size:14.5px;line-height:1.55;max-width:110ch}
+.foot{display:flex;flex-direction:column;gap:7px;padding-block:10px 36px;color:var(--ash);font-size:14.5px;line-height:1.55;max-width:110ch}
+.foot .k{padding-bottom:7px;border-bottom:1px solid var(--hair)}
+.foot p{margin:0;text-wrap:pretty}
+.foot b{color:var(--vellum-2);font-weight:600}
+.foot .me{margin-top:4px;color:var(--vellum-2)}
 .foot a{color:var(--vellum-2)}
 .err{color:#F08A7E}
 @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;transition:none!important}}
@@ -283,7 +287,15 @@ h1{margin:2px 0 0;font-family:var(--f-display);font-weight:600;font-size:42px;li
     <aside class="desk" id="bdesk" aria-live="polite"></aside>
   </section>
 
-  <p class="foot" id="foot">Cross references from <a href="https://www.openbible.info/labs/cross-references/" target="_blank" rel="noopener">OpenBible.info</a> (CC BY), built on the Treasury of Scripture Knowledge and ranked by reader votes; references readers voted down are left out. Verse text: King James Version (1769) and the Berean Standard Bible, both public domain. The NIV is copyrighted, so NIV links open the verse on BibleGateway.<br>App code and design © 2026 Isaiah Huus. All rights reserved.</p>
+  <footer class="foot" id="foot">
+    <div class="k"><span>Credits and licenses</span></div>
+    <p><b>Cross references</b> from <a href="https://www.openbible.info/labs/cross-references/" target="_blank" rel="noopener">OpenBible.info</a>, licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. They began with the public-domain Treasury of Scripture Knowledge and are ranked by reader votes. Changes made here: the 1,217 references readers voted below zero are left out, and the rest are repacked for this app.</p>
+    <p><b>King James Version</b> (1769 text, via <a href="https://github.com/farskipper/kjv" target="_blank" rel="noopener">farskipper/kjv</a>). Public domain in most of the world; in the United Kingdom, rights in the KJV are vested in the Crown.</p>
+    <p><b>Berean Standard Bible.</b> The Holy Bible, Berean Standard Bible, BSB is produced in cooperation with Bible Hub, Discovery Bible, OpenBible.com, and the Berean Bible Translation Committee. This text of God's Word has been dedicated to the public domain. <a href="https://berean.bible/" target="_blank" rel="noopener">berean.bible</a> · text file via <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">scrollmapper/bible_databases</a> (MIT License).</p>
+    <p><b>NIV</b> links open the verse on <a href="https://www.biblegateway.com/versions/New-International-Version-NIV-Bible/" target="_blank" rel="noopener">BibleGateway</a>; no NIV text is included here. New International Version® and NIV® are registered trademarks of Biblica, Inc.</p>
+    <p><b>Inspired by</b> <a href="https://www.chrisharrison.net/index.php/Visualizations/BibleViz" target="_blank" rel="noopener">Visualizing the Bible</a> by Chris Harrison and Christoph Römhild (2007), and a reel by <a href="https://www.instagram.com/thebibleinnumbers/" target="_blank" rel="noopener">@thebibleinnumbers</a>.</p>
+    <p class="me">App code and design © 2026 Isaiah Huus. All rights reserved. This notice does not cover the Bible text or the cross-reference data credited above.</p>
+  </footer>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>

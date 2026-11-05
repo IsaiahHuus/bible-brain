@@ -174,7 +174,13 @@ for t in THREADS:
 print("threads", len(threads_out), "steps", sum(len(t["steps"]) for t in threads_out))
 
 data = {
-    "source": "OpenBible.info cross references (CC-BY), build " + os.path.getmtime(os.path.join(RAW, "cross_references.txt")).__int__().__str__(),
+    "attribution": {
+        "crossReferences": ("Cross references from OpenBible.info (https://www.openbible.info/labs/cross-references/), "
+                            "licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Changes: %d references "
+                            "with negative reader votes removed; the remaining %d repacked into the counts/to/span/votes "
+                            "arrays below. Those arrays stay under CC BY 4.0." % (neg, len(refs))),
+        "threads": "The curated threads are (c) 2026 Isaiah Huus, all rights reserved.",
+    },
     "books": [{"o": o, "n": n, "a": a, "s": s, "v": vcounts[i]} for i, (o, n, a, s) in enumerate(BOOKS)],
     "sections": SECTIONS,
     "threads": threads_out,

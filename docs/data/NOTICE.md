@@ -1,0 +1,5 @@
+# Data notice
+
+- `xrefs.json`: the `counts`, `to`, `span` and `votes` arrays are cross references from [OpenBible.info](https://www.openbible.info/labs/cross-references/), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changed: references with negative reader votes removed; the rest repacked. The `threads` list is © 2026 Isaiah Huus, all rights reserved.
+- `kjv.json`: King James Version (1769), public domain (in the United Kingdom, rights in the KJV are vested in the Crown), from [farskipper/kjv](https://github.com/farskipper/kjv) (The Unlicense).
+- `bsb.json`: The Holy Bible, Berean Standard Bible, BSB is produced in cooperation with Bible Hub, Discovery Bible, OpenBible.com, and the Berean Bible Translation Committee. This text of God's Word has been dedicated to the public domain. Text file from [scrollmapper/bible_databases](https://github.com/scrollmapper/bible_databases) (MIT License, Copyright (c) 2024 Scrollmapper; full text in `THIRD_PARTY_NOTICES.md` at the repository root).
